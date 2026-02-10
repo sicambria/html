@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="hu" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>A Bölcs Útitárs Útmutatója segítő beszélgetésekhez</title>
+    <meta name="description" content="Közérthető útmutató a mély, megoldásfókuszú segítő beszélgetésekhez. Tanuld meg, hogyan kísérd a Vándort tanácsok helyett kérdésekkel a megoldás felé.">
+    <meta name="keywords" content="coaching, segítő beszélgetés, önismeret, megoldásfókusz, bölcsesség, kérdezéstechnika">
+    <meta name="author" content="Incze Gáspár">
+    <meta property="og:title" content="A Bölcs Útitárs Útmutatója">
+    <meta property="og:description" content="Hogyan segítsünk a Vándornak megtalálni a saját megoldását.">
+    <meta property="og:type" content="website">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'magic-dark': '#0f172a',
+                        'magic-purple': '#2e1065',
+                        'magic-gold': '#fbbf24',
+                        'scroll-paper': '#fefce8',
+                    },
+                    fontFamily: {
+                        'title': ['Cinzel', 'serif'],
+                        'story': ['Cormorant Garamond', 'serif'],
+                        'body': ['Montserrat', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(40px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fbbf24;
+        }
+
+        /* Firefly Particle Effect */
+        .firefly {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 0.4vw;
+            height: 0.4vw;
+            margin: -0.2vw 0 0 9.8vw;
+            animation: ease 200s alternate infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .firefly::before, .firefly::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform-origin: -10vw;
+        }
+        .firefly::before {
+            background: #fbbf24;
+            opacity: 0.4;
+            animation: drift ease alternate infinite;
+        }
+        .firefly::after {
+            background: white;
+            opacity: 0;
+            box-shadow: 0 0 0vw 0vw yellow;
+            animation: flash ease infinite;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Narrator Text Style - inline version */
+        .narrator-inline {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            color: #94a3b8; /* slate-400 */
+            line-height: 1.6;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .narrator-highlight {
+            color: #fbbf24;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="bg-magic-dark text-gray-200 font-body overflow-x-hidden relative">
+
+    <!-- Fireflies Background Container -->
+    <div id="fireflies-container"></div>
+
+    <!-- Navigation / Progress -->
+    <nav class="fixed top-0 w-full z-50 bg-magic-dark/80 backdrop-blur-md border-b border-white/10 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2 text-magic-gold">
+                <i data-lucide="compass" class="w-6 h-6 animate-pulse-slow"></i>
+                <span class="font-title font-bold text-lg hidden sm:block">Bölcs Útitárs</span>
+            </div>
+            <div class="text-xs sm:text-sm text-gray-400 font-story italic">
+                "Az utat neked kell járnod..."
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center text-center px-4 pt-20 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1519681393798-3828fb4090bb?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-magic-dark/50 via-magic-dark/80 to-magic-dark"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto space-y-8 animate-fade-in-up">
+            <div class="inline-block p-3 rounded-full border border-magic-gold/30 bg-magic-gold/10 mb-4 animate-float">
+                <i data-lucide="sparkles" class="w-8 h-8 text-magic-gold"></i>
+            </div>
+			
+			<h1 class="text-4xl md:text-6xl lg:text-7xl font-title text-yellow-400 bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-600 drop-shadow-lg">
+
+			
+                A Bölcs Útitárs Útmutatója
+            </h1>
+            <p class="text-xl md:text-2xl font-story text-gray-300 italic max-w-2xl mx-auto leading-relaxed">
+                Hogyan segítsünk a Vándornak megtalálni a saját megoldását.
+            </p>
+            
+            <div class="pt-12 flex flex-col items-center gap-6">
+                <div class="max-w-xs space-y-4">
+                    <img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?q=80&w=2071&auto=format&fit=crop" alt="Táltos paripa" class="rounded-xl shadow-2xl border border-magic-gold/50 opacity-80 hover:opacity-100 transition-opacity">
+                    <p class="font-story text-xl italic text-yellow-100">
+                        „Hogy mönjünk, kis gazdám? Ugy-é, mint a szél, vagy sebesebben mint a gondolat?”
+                    </p>
+                </div>
+                
+                <a href="#intro-context" class="group relative px-8 py-3 bg-transparent border border-magic-gold text-magic-gold rounded-full font-title tracking-wider overflow-hidden hover:bg-magic-gold hover:text-magic-dark transition-all duration-300">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Induljunk az Úton <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bevezetés: A Tanácsok Csapdája -->
+    <section id="intro-context" class="relative py-20 px-4 bg-magic-dark">
+        <div class="max-w-3xl mx-auto scroll-reveal text-center space-y-6">
+            <i data-lucide="signpost" class="w-10 h-10 text-gray-500 mx-auto mb-4"></i>
+            <h2 class="text-2xl font-title text-gray-200">A Téves Térképek Birodalma</h2>
+            <div class="font-story text-xl leading-loose text-gray-400 italic">
+                "A Vándor, mikor útnak indul, sokakkal találkozik. Jószándékú emberek kiabálnak felé: 
+                'Arra menj, ott a kút!', 'Ne arra, ott a sűrű erdő!'. 
+                A külső világban létező dolgok esetében, mint pl. egy erdei forrás megtalálása, ezek a tanácsok aranyat érhetnek. (Ha jó a tanács!) 
+                De amikor a Vándor a lelke belső tájain téved el, a mások térképe veszélyes lehet. 
+                Ami az egyiknek járható ösvény, a másiknak szakadék. 
+                <span class="text-magic-gold">Ez az útmutató arra tanít, hogy ne a saját térképedet add a kezébe, 
+                hanem lámpást tarts neki, hogy ő maga láthassa meg a saját útját.</span>"
+            </div>
+        </div>
+    </section>
+
+    <!-- 0. Lépés: A Bizalom Köre -->
+    <section id="step-0" class="relative py-24 px-4 bg-gradient-to-b from-magic-dark to-indigo-950">
+        <div class="max-w-5xl mx-auto scroll-reveal">
+            
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 relative">
+                    <div class="absolute -inset-4 bg-magic-gold/20 rounded-full blur-3xl animate-pulse-slow"></div>
+                    <img src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2070&auto=format&fit=crop" alt="Lámpás az erdőben" class="relative rounded-2xl shadow-2xl border border-white/10 rotate-3 hover:rotate-0 transition-transform duration-700">
+                </div>
+                <div class="md:w-1/2 space-y-4">
+                    <div class="flex items-center gap-3 text-magic-gold mb-2">
+                        <span class="text-4xl font-title opacity-50">0.</span>
+                        <h2 class="text-3xl font-title">A Bizalom Köre</h2>
+                    </div>
+                    <h3 class="text-xl font-story text-yellow-100 italic">Az Alapok • max. 2 perc</h3>
+                    
+                    <!-- Integrált bevezető -->
+                    <p class="narrator-inline text-xl text-gray-400 pl-4 border-l-2 border-magic-gold/50">
+                        Mielőtt bármerre indulnánk, biztonságos menedéket építünk. 
+                        Ha a Vándor nem érzi biztonságban magát, akkor nem teszi le a pajzsát és nem osztja meg a valódi gondolatait, fájdalmait vagy vágyait.
+                        Ez a szakasz a lélek megérkezéséről szól.
+                    </p>
+
+                    <div class="glass-card p-6 rounded-xl space-y-4 mt-6">
+                        <div class="flex gap-4">
+                            <i data-lucide="lock" class="w-6 h-6 text-magic-gold shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">A Titok</h4>
+                                <p class="text-gray-300">„Minden, amit itt elmondasz, hét lakat alatt marad, mintha csak egy mély kútba súgtad volna.
+                                De ha veszélyben vagy, akkor viszont együtt gondolkodunk, hogy kihez forduljunk.”</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-white/10 my-2"></div>
+                        <div class="flex gap-4">
+                            <i data-lucide="map" class="w-6 h-6 text-magic-gold shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">A Szerepek</h4>
+                                <p class="text-gray-300">„Tudom, hogy jó vagy és jót akarsz. Én fogom a lámpást és kérdezek, de nem adok tanácsot. 
+                                Az életedet te ismered a legjobban, s a saját utadat neked kell járnod.”</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-white/10 my-2"></div>
+                        <div class="flex gap-4">
+                            <i data-lucide="hourglass" class="w-6 h-6 text-magic-gold shrink-0 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Az Idő</h4>
+                                <p class="text-gray-300">„Rendelkezésünkre áll (a megbeszélt idő): ... perc. Kezdhetünk?”</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Integrált lezárás -->
+                    <p class="narrator-inline text-xl text-emerald-300 pl-4 border-l-2 border-emerald-500/50 mt-6">
+                        <span class="font-bold not-italic">Hová érkeztünk?</span> A bizalom köre kiépült. A Vándor immár tudja, hogy nem ítélkezünk felette, és a titkai biztonságban vannak. A félelem köde felszáll, így a valódi munka elkezdődhet.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1. Lépés: Az Egyezség Megkötése -->
+    <section class="relative py-24 px-4 bg-indigo-950">
+        <div class="max-w-6xl mx-auto relative z-10 scroll-reveal">
+            
+            <div class="text-center mb-12">
+                <span class="inline-block px-3 py-1 border border-indigo-400 rounded-full text-indigo-300 text-sm mb-4">1. Lépés</span>
+                <h2 class="text-4xl md:text-5xl font-title text-white mb-4">Az Egyezség Megkötése</h2>
+                <p class="font-story text-xl text-indigo-200 mb-6">„Ha ez nincs meg, csak fecsegünk, de nem haladunk.”</p>
+                
+                <!-- Integrált bevezető -->
+                <p class="narrator-inline text-xl max-w-2xl mx-auto text-indigo-200/70">
+                    Sokan úgy indulnak útnak, hogy nem tudják, hová tartanak. Itt pontosítjuk az iránytűt. Nem elég panaszolni a sötétséget, meg kell nevezni, milyen fényt keresünk.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <!-- Card 1 -->
+                <div class="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group">
+                    <div class="w-12 h-12 bg-red-900/50 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="backpack" class="text-red-300 w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 font-title text-red-100">1. A Teher</h3>
+                    <p class="text-sm text-gray-300 mb-4 italic">Miről beszéljünk?</p>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex gap-2"><span class="text-red-400">❧</span> „Mi az, ami most a leginkább nyomja a szívedet?”</li>
+                        <li class="flex gap-2"><span class="text-red-400">❧</span> „Ha címet kéne adnod a mai beszélgetésünknek, mi lenne az?”</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group border-yellow-500/30">
+                    <div class="w-12 h-12 bg-yellow-900/50 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="target" class="text-yellow-300 w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 font-title text-yellow-100">2. A Cél és az Ok</h3>
+                    <p class="text-sm text-gray-300 mb-4 italic">Hová és miért?</p>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex gap-2"><span class="text-yellow-400">❧</span> „Milyen kincset szeretnél a kezedben tartani?”</li>
+                        <li class="flex gap-2"><span class="text-yellow-400">❧</span> „Mennyire égető ez most? 1-től 10-ig hol állsz?”</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card p-8 rounded-2xl hover:bg-white/5 transition-colors group">
+                    <div class="w-12 h-12 bg-emerald-900/50 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="flag" class="text-emerald-300 w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 font-title text-emerald-100">3. A Siker Jele</h3>
+                    <p class="text-sm text-gray-300 mb-4 italic">Megérkeztünk?</p>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex gap-2"><span class="text-emerald-400">❧</span> „Miből fogod tudni, hogy elérted a célodat?”</li>
+                        <li class="flex gap-2"><span class="text-emerald-400">❧</span> „Mi lesz az a kézzelfogható jel?” (pl. van tervem arra hogy...)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Integrált lezárás -->
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="narrator-inline text-emerald-300/80 border-t text-xl border-emerald-500/30 pt-6">
+                    <span class="font-bold not-italic text-emerald-400 block mb-1">Eredmény</span>
+                    Most már nem csak bolyongunk a sűrűben. Van egy pontos célunk, és tudjuk, miért éri meg küzdeni. 
+                    A beszélgetés innentől kezdve fókuszált, az energia nem vész kárba a panaszok mocsarában.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 2. Lépés: A Varázsálom -->
+    <section class="relative py-32 px-4 overflow-hidden bg-magic-dark">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2094&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+        
+        <div class="max-w-4xl mx-auto relative z-10 scroll-reveal">
+            
+            <div class="text-center mb-12">
+                <i data-lucide="moon" class="w-12 h-12 text-blue-200 mx-auto mb-4 animate-float"></i>
+                <h2 class="text-4xl md:text-5xl font-title text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-400">2. A Varázsálom</h2>
+                <p class="text-lg text-blue-200/80 font-story mt-2 mb-6">A jövő képe • Kilépni a gondok sötét erdejéből</p>
+                
+                <!-- Integrált bevezető -->
+                <p class="narrator-inline max-w-2xl mx-auto text-xl text-purple-200/60">
+                    A probléma falai gyakran olyan magasak, hogy nem látni tőlük az eget. 
+                    Ezért most egy varázslatos ugrással átlendülünk a falon, egyenesen a megoldott jövőbe.<br/>
+                    Nem azt kérdezzük, "hogyan", hanem hogy "milyen lesz ott".
+                </p>
+            </div>
+
+            <div class="bg-black/40 backdrop-blur-md border border-purple-500/30 p-8 md:p-12 rounded-3xl shadow-[0_0_50px_rgba(139,92,246,0.15)] mb-12">
+                <div class="space-y-8">
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-purple-900/50 p-3 rounded-full"><i data-lucide="bed" class="w-5 h-5 text-purple-300"></i></div>
+                        <div>
+                            <h4 class="font-bold text-purple-200 mb-1">Az Alvás</h4>
+                            <p class="font-story text-xl text-gray-300">„Képzeld el, hogy ma este hazamész, és mély álomba szenderülsz.”</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-purple-900/50 p-3 rounded-full"><i data-lucide="wand-2" class="w-5 h-5 text-purple-300"></i></div>
+                        <div>
+                            <h4 class="font-bold text-purple-200 mb-1">A Csoda</h4>
+                            <p class="font-story text-xl text-gray-300">„Miközben alszol, történik egy varázslat. A gond, amivel idejöttél, az éj leple alatt tökéletesen megoldódik.”</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-purple-900/50 p-3 rounded-full"><i data-lucide="sun" class="w-5 h-5 text-purple-300"></i></div>
+                        <div>
+                            <h4 class="font-bold text-purple-200 mb-1">Az Ébredés</h4>
+                            <p class="font-story text-xl text-gray-300">„Reggel felébredsz, de nem tudod, hogy a varázslat megtörtént. <span class="text-magic-gold">Mi lesz az első apró jel, amiből észreveszed, hogy a csoda megtörtént?</span>”</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-purple-900/20 p-6 rounded-xl border-l-4 border-purple-500 mt-8">
+                        <h5 class="font-bold text-purple-300 mb-2 uppercase text-xs tracking-widest">A kép kiszínezése</h5>
+                        <ul class="space-y-2 text-gray-300 italic font-story">
+                            <li>„Mit csinálsz reggel másképp?”</li>
+                            <li>„Mit lát rajtad a családod?”</li>
+                            <li>„Hogyan szólsz másokhoz?”</li>
+                            <li class="font-bold text-white not-italic mt-2">„És mi más még?”</li>
+                            <li class="font-bold text-white not-italic">„Milyen változást vesznek észre még rajtad mások?”</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integrált lezárás -->
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="narrator-inline text-emerald-300/80 border-t text-xl border-purple-500/30 pt-6">
+                    <span class="font-bold not-italic text-emerald-400 block mb-1">A varázslat hatása</span>
+                    A Vándor szeme felcsillan. Már nem a problémán rágódik, hanem megérezte a megoldás ízét. Ez a jövőkép mágnesként kezdi el vonzani őt, erőt adva a nehéz lépésekhez. A cél már nem elvont fogalom, hanem élő valóság.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Lépés: A Hegymászás -->
+    <section class="relative py-24 px-4 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div class="max-w-5xl mx-auto scroll-reveal">
+            
+            <div class="flex flex-col-reverse md:flex-row items-center gap-12 mb-12">
+                <div class="md:w-1/2 space-y-6">
+                    <div>
+                        <span class="text-cyan-400 font-bold tracking-widest text-xs uppercase mb-2 block">3. Lépés</span>
+                        <h2 class="text-4xl font-title text-white">A Hegymászás</h2>
+                        <p class="text-slate-400 mt-2">Hol tartunk most a hegyoldalon?</p>
+                        
+                        <!-- Integrált bevezető -->
+                        <p class="narrator-inline text-cyan-200/60 text-xl mt-4">
+                            Miután láttuk a csúcsot (a Varázsálmot), vissza kell térnünk a földre, de nem üres kézzel. Megnézzük, hol tartunk most, és észrevesszük, hogy talán nem is a legmélyebb szakadékban vagyunk, hanem már elindultunk felfelé.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="glass-card p-5 rounded-lg border-l-4 border-cyan-500">
+                            <h4 class="font-bold text-cyan-100">1. A Hegyoldal</h4>
+                            <p class="text-sm text-gray-300 mt-1">„A csúcs a 10-es (Varázsálom), a lába az 1-es (legnagyobb baj). Te most hol állsz?”</p>
+                        </div>
+                        
+                        <div class="glass-card p-5 rounded-lg border-l-4 border-cyan-500">
+                            <h4 class="font-bold text-cyan-100">2. A Tarisznya</h4>
+                            <p class="text-sm text-gray-300 mt-1">„Hármas? Nagyszerű! Mitől hármas? Mit van már ott a tarisznyádban (erősség, erőforrás), mit értél el már eddig?”</p>
+                        </div>
+
+                        <div class="glass-card p-5 rounded-lg border-l-4 border-cyan-500">
+                            <h4 class="font-bold text-cyan-100">3. Tyúklépés (Közeljövő)</h4>
+                            <p class="text-sm text-gray-300 mt-1">„Mi lenne a négyes? Mit tudnál tenni holnapig?”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 relative flex justify-center">
+                    <div class="relative w-full aspect-square max-w-sm">
+                         <div class="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-cyan-900/40 to-transparent rounded-t-[100px] blur-xl"></div>
+                         <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]">
+                            <path d="M100 20 L20 180 L180 180 Z" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M100 20 L130 80 L110 80 L140 140 L120 140 L150 180" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+                            <circle cx="20" cy="180" r="4" fill="#ef4444" />
+                            <text x="10" y="195" fill="white" font-size="10" font-family="sans-serif">1</text>
+                            <circle cx="70" cy="120" r="6" fill="#fbbf24" class="animate-pulse" />
+                            <text x="80" y="125" fill="#fbbf24" font-size="10" font-family="sans-serif">Te most</text>
+                            <circle cx="100" cy="20" r="4" fill="#10b981" />
+                            <text x="95" y="15" fill="white" font-size="10" font-family="sans-serif">10</text>
+                         </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integrált lezárás -->
+            <div class="max-w-3xl mx-auto">
+                <p class="narrator-inline text-xl text-emerald-300/80 border-t border-cyan-500/30 pt-6">
+                    <span class="font-bold not-italic text-emerald-400 block mb-1">A felismerés ereje</span>
+                    A Vándor rájön, hogy már rendelkezik erőforrásokkal. A hatalmas, ijesztő ugrást felváltja egy apró, megtehető "tyúklépés". A félelem csökken, a cselekvőképesség visszatér. A hegy már nem legyőzhetetlen.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4. Lépés: Az Indulás -->
+    <section class="relative py-24 px-4 bg-slate-800">
+        <div class="max-w-4xl mx-auto scroll-reveal text-center">
+            
+            <h2 class="text-3xl md:text-4xl font-title text-white mb-6">4. Az Indulás: Terv és Búcsú</h2>
+            
+            <!-- Integrált bevezető -->
+            <p class="narrator-inline text-xl max-w-2xl mx-auto text-orange-200/60 mb-10">
+                Lassan a beszélgetés végéhez érünk. De a felismerés mit sem ér cselekvés nélkül. Itt kötjük össze a szellemi-lelki munkát a fizikai valósággal, hogy a változás meg is történjen.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6 text-left mb-10">
+                <div class="glass-card p-6 rounded-xl bg-orange-900/20 border border-orange-500/30">
+                    <h3 class="text-xl font-bold text-orange-200 mb-4 flex items-center gap-2">
+                        <i data-lucide="gem" class="w-5 h-5"></i> Kincskeresés (Visszatekintés)
+                    </h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li>„Milyen kincset találtál ma magadban?”</li>
+                        <li>„Mi lepett meg a legjobban?”</li>
+                        <li>„Hogyan változott a kedved az eleje óta?”</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card p-6 rounded-xl bg-green-900/20 border border-green-500/30">
+                    <h3 class="text-xl font-bold text-green-200 mb-4 flex items-center gap-2">
+                        <i data-lucide="footprints" class="w-5 h-5"></i> A Tett (Konkrét lépés)
+                    </h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li>„Mi lesz az első lépésed?”</li>
+                        <li>„Mikor csinálod meg?”</li>
+                        <li>„Kire számíthatsz?”</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Integrált lezárás -->
+            <div class="max-w-3xl mx-auto text-center">
+                <p class="narrator-inline text-xl text-emerald-300/80 border-t border-orange-500/30 pt-6">
+                    <span class="font-bold not-italic text-emerald-400 block mb-1">Útravaló</span>
+                    A Vándor nem üres kézzel távozik. Van a zsebében egy "kincs" (önbizalom, felismerés) és a lábában egy "mozdulat" (konkrét terv). A Bölcs Útitárs munkája itt véget ér; a Vándor készen áll az életre.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Tartalék Terv & Nehéz Helyzetek -->
+    <section class="relative py-24 px-4 bg-[#1a1429] border-t border-white/5">
+        <div class="max-w-6xl mx-auto scroll-reveal">
+            
+            <div class="mb-20">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="h-px bg-gray-600 flex-1"></div>
+                    <span class="text-gray-400 uppercase tracking-widest text-sm">Tartalék Terv</span>
+                    <div class="h-px bg-gray-600 flex-1"></div>
+                </div>
+
+                <div class="bg-gray-800/50 p-8 rounded-2xl text-center max-w-3xl mx-auto">
+                    <h3 class="text-2xl font-title text-gray-200 mb-4">A Józan Ész Útja</h3>
+                    
+                    <!-- Integrált bevezető -->
+                    <p class="narrator-inline text-xl text-gray-400 mb-6">
+                        Néha a Vándor túl földhözragadt, vagy a probléma túl racionális a mesékhez. Ilyenkor elővesszük a józan ész egyszerű eszközeit.
+                    </p>
+
+                    <div class="flex justify-center gap-4 text-sm font-bold text-gray-300">
+                        <span class="px-4 py-2 bg-gray-700 rounded-lg">1. Tények</span>
+                        <span class="px-4 py-2 bg-gray-700 rounded-lg">→</span>
+                        <span class="px-4 py-2 bg-gray-700 rounded-lg">2. Lehetőségek</span>
+                        <span class="px-4 py-2 bg-gray-700 rounded-lg">→</span>
+                        <span class="px-4 py-2 bg-gray-700 rounded-lg">3. Akarat</span>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-16 mt-8">
+                    <div class="glass-card p-6 rounded-xl border-t-4 border-gray-500 hover:bg-gray-800/50 transition-colors">
+                        <h4 class="font-bold text-gray-200 mb-2">1. Valóság (Tények)</h4>
+                        <p class="text-xs text-gray-400 mb-4 italic">Tiszta víz a pohárban. A kiindulópont.</p>
+                        <ul class="text-sm text-gray-300 space-y-3">
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Mik a puszta tények?"</li>
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Mit próbáltál eddig megoldásként?"</li>
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Milyen konkrét akadályok vannak?"</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl border-t-4 border-gray-500 hover:bg-gray-800/50 transition-colors">
+                        <h4 class="font-bold text-gray-200 mb-2">2. Lehetőségek</h4>
+                        <p class="text-xs text-gray-400 mb-4 italic">Ötletelés ítélkezés nélkül.</p>
+                        <ul class="text-sm text-gray-300 space-y-3">
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Milyen ösvények vezetnek a célhoz?"</li>
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Mi mást tehetnél még?"</li>
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Ha lenne egy varázspálcád, mit tennél?"</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl border-t-4 border-gray-500 hover:bg-gray-800/50 transition-colors">
+                        <h4 class="font-bold text-gray-200 mb-2">3. Akarat</h4>
+                        <p class="text-xs text-gray-400 mb-4 italic">A döntés és elköteleződés pillanata.</p>
+                        <ul class="text-sm text-gray-300 space-y-3">
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Melyik utat választod a sok közül?"</li>
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Mennyire vagy biztos a sikerben (1-10)?"</li>
+                            <li class="flex gap-2"><span class="text-gray-500">➢</span> "Mi lesz a legelső konkrét lépésed?"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tükör vs Parancsnok -->
+            <h2 class="text-3xl font-title text-center text-white mb-4">Tükör vs. Parancsnok</h2>
+            <p class="text-center text-gray-400 max-w-2xl mx-auto mb-12 font-story text-lg leading-relaxed">
+                Mi a különbség? A <span class="text-red-400 font-bold">Parancsnok</span> vezetni akarja a Vándort, megmondja a tutit, 
+                ami gyakran ellenállást szül. 
+                A <span class="text-emerald-400 font-bold">Tükör</span> ezzel szemben csak visszatükrözi a valóságot.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <!-- Scenarios -->
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha elöntik az érzelmek (Sír, dühös)</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Vegyél nagy levegőt! Nyugodj meg!"</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: "Látom, hogy ez most nagyon szíven ütött... Itt vagyok veled."</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha másokat okol</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Foglalkozzunk inkább veled!"</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: "Úgy hallom, sok múlik a többieken. De mi az, ami a te kezedben van?"</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha azt mondja: "Nem tudom"</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Gondold végig jobban!"</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: *Csend* ... "Mi teszi most nehézzé a választ?"</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha tanácsot kér ("Te mit tennél?")</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Szerintem csináld ezt..."</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: "Szívesen elmondom a végén, de előbb: a te fejedben milyen ötletek járnak?"</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha bagatellizál ("Á, nem is olyan nagy ügy")</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Dehogynem, ez komoly probléma!"</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: "Most úgy tűnik, kicsinek látod. 
+                        Mégis, mi az a része, ami miatt mégis beszélni szerettél volna róla?"</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha hosszú csend áll be</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Mondj valamit! Ne hallgass!"</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: (Türelmes várakozás után) 
+                        "Most nagy a csend. Mi jár a fejedben?"</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha megerősítést vár ("Jól gondolom?")</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Igen, pontosan így van."</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: "Nekem úgy tűnik, ez neked fontos. 
+                        Te hogyan érzed, mennyire illik ez hozzád?"</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-white mb-2">Ha sürgeti a megoldást ("Haladjunk már!")</h4>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-red-400 opacity-70 line-through">Parancsnok: "Nincs egész napunk, siessünk!"</p>
+                        <p class="text-emerald-400 font-semibold">Tükör: "Látom, szeretnél a végére érni. 
+                        Mi az, ami most a leggyorsabban segítene?"</p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Integrált lezárás -->
+            <div class="max-w-3xl text-xl mx-auto text-center">
+                <p class="narrator-inline text-emerald-300/80 border-t border-gray-600/50 pt-6">
+                    <span class="font-bold not-italic text-emerald-400 block mb-1">A bölcsesség kulcsa</span>
+                    Aki tükröt tart, az nem harcol, nem fárad el, és nem viszi el a felelősséget. 
+                    A Vándor pedig nem egy parancsot hajt végre, hanem saját arcába nézve talál rá az erejére.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Záró Vízió -->
+    <section class="relative py-20 px-4 bg-black text-center border-t border-gray-800">
+        <div class="max-w-4xl mx-auto space-y-6 scroll-reveal">
+            <i data-lucide="globe-2" class="w-12 h-12 text-blue-900 mx-auto"></i>
+            <h3 class="text-2xl font-title text-blue-100">Egy Új Világ Születése</h3>
+            <p class="font-story text-xl text-gray-300 italic leading-relaxed">
+                "Ez a tudás egy csendesebb és figyelmesebb világot teremt. Nem egymás túlharsogása a cél, hanem a valódi megértés. 
+                Egy olyan világ születik, ahol mindenki hordozza a bölcsességet, hogy a másikat saját legjobb megoldásához segítse, 
+                s így az ítélkezést felváltja a támogató jelenlét. Ahol nem megmondjuk az utat, hanem egymásnak világítunk."
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-xl py-12 text-center text-gray-600 text-sm">
+        <p class="font-title text-gray-500 mb-2">A Bölcs Útitárs Útmutatója</p>
+        <p class="font-story italic">"Az életed térképét te ismered a legjobban."</p>
+    </footer>
+    
+    
+    <section class="max-w-3xl mx-auto mt-8 p-4 text-center">
+  <div class="flex flex-col items-center gap-3">
+    
+
+    <!-- Title -->
+    <h3 class="text-2xl font-title text-blue-100">
+      Add tovább.
+    </h3>
+    
+
+
+    <!-- Description -->
+    <p class="text-sm text-gray-600 leading-relaxed">
+      Ez a tartalom a Creative Commons Nevezd meg – Így add tovább 4.0 Nemzetközi
+      (CC BY-SA 4.0) licenc alatt érhető el. Szabadon megoszthatod, átdolgozhatod
+      és felhasználhatod, akár kereskedelmi célra is, amennyiben feltünteted az
+      eredeti szerzőt (Incze Gáspár - inczegaspar.hu), és az ebből származó művet ugyanilyen licenc alatt teszed
+      közzé.
+    </p>
+
+    <!-- License link -->
+    <a
+      href="https://creativecommons.org/licenses/by-sa/4.0/deed.hu"
+      target="_blank"
+      rel="license noopener noreferrer"
+      class="text-sm font-medium text-emerald-600 hover:text-emerald-700 underline"
+    >
+      CC BY-SA 4.0 licenc részletei
+    </a>
+    
+    <!-- CC Logo -->
+    <div class="flex items-center gap-2">
+      <img
+        src="https://licensebuttons.net/l/by-sa/4.0/88x31.png"
+        alt="Creative Commons BY-SA 4.0"
+        class="h-8 w-auto"
+      />
+     
+    </div>
+    
+    
+  </div>
+</section>
+
+
+    <script>
+        lucide.createIcons();
+        const container = document.getElementById('fireflies-container');
+        for (let i = 0; i < 30; i++) {
+            const firefly = document.createElement('div');
+            firefly.classList.add('firefly');
+            firefly.style.top = `${Math.random() * 100}vh`;
+            firefly.style.left = `${Math.random() * 100}vw`;
+            firefly.style.animationDelay = `${Math.random() * -200}s`;
+            firefly.style.animationDuration = `${100 + Math.random() * 200}s`;
+            container.appendChild(firefly);
+        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
