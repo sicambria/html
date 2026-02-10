@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -22,6 +21,9 @@
         }
         ::-webkit-scrollbar-track {
             background: #f1f1f1;
+        }
+        .theme-dark ::-webkit-scrollbar-track {
+            background: #1f2937;
         }
         ::-webkit-scrollbar-thumb {
             background: #888;
@@ -57,6 +59,10 @@
             border: 2px solid #ddd;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .theme-dark input[type="range"]::-webkit-slider-thumb {
+            background: #e5e7eb;
+            border-color: #6b7280;
+        }
         input[type="range"]::-moz-range-thumb {
             width: 24px;
             height: 24px;
@@ -66,10 +72,14 @@
             border: 2px solid #ddd;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .theme-dark input[type="range"]::-moz-range-thumb {
+            background: #e5e7eb;
+            border-color: #6b7280;
+        }
 
         /* Theme styles */
         .theme-colorful {
-            background-color: #fdf2f8; /* A light pinkish background */
+            background-color: #fdf2f8;
             color: #1f2937;
         }
         .theme-light {
@@ -80,12 +90,6 @@
             background-color: #111827;
             color: #f9fafb;
         }
-        .theme-dark .dark\:text-gray-200 { color: #e5e7eb; }
-        .theme-dark .dark\:bg-gray-800 { background-color: #1f2937; }
-        .theme-dark .dark\:bg-gray-700 { background-color: #374151; }
-        .theme-dark .dark\:border-gray-600 { border-color: #4b5563; }
-        .theme-dark .dark\:text-white { color: #ffffff; }
-        .theme-dark .dark\:text-gray-400 { color: #9ca3af; }
 
         /* Animation for content fade-in */
         .animate-fadeIn {
@@ -127,12 +131,12 @@
             <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent" data-translate="app_title">Élettükör</h1>
             <div class="flex items-center gap-2 sm:gap-4">
                 <!-- Language Switcher -->
-                <div class="flex items-center gap-1 rounded-full p-1 bg-gray-200 dark:bg-gray-700">
-                    <button id="lang-hu" class="px-3 py-1 text-sm font-semibold rounded-full bg-white shadow">HU</button>
+                <div class="flex items-center gap-1 rounded-full p-1 bg-gray-200 theme-dark-lang-bg">
+                    <button id="lang-hu" class="px-3 py-1 text-sm font-semibold rounded-full bg-white shadow text-gray-800">HU</button>
                     <button id="lang-en" class="px-3 py-1 text-sm font-semibold rounded-full text-gray-600">EN</button>
                 </div>
                 <!-- Theme Switcher -->
-                <div class="flex items-center gap-1 rounded-full p-1 bg-gray-200 dark:bg-gray-700">
+                <div class="flex items-center gap-1 rounded-full p-1 bg-gray-200 theme-dark-theme-bg">
                     <button id="theme-colorful" title="Színes" class="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 border-2 border-white shadow"></button>
                     <button id="theme-light" title="Világos" class="w-7 h-7 rounded-full bg-white border-2 border-gray-300"></button>
                     <button id="theme-dark" title="Sötét" class="w-7 h-7 rounded-full bg-gray-800 border-2 border-gray-600"></button>
@@ -167,8 +171,6 @@
 
            
            // --- TRANSLATIONS & DATA ---
-// All translations have been verified and now exist in both English (en) and Hungarian (hu).
-
 const translations = {
     hu: {
         app_title: "Élettükör",
@@ -387,23 +389,75 @@ const questions = [
             
             const getStatus = (score, trend) => {
                 if (trend > 0.5) {
-                    if (score >= 6.5) return { label: T('status_green_thriving_growing'), bg: 'bg-green-50 dark:bg-green-900/50', color: 'text-green-600 dark:text-green-400', icon: '&#x1F31F;' };
-                    if (score >= 4.5) return { label: T('status_yellow_improving'), bg: 'bg-yellow-50 dark:bg-yellow-900/50', color: 'text-yellow-600 dark:text-yellow-400', icon: '&#x1F4C8;' };
-                    return { label: T('status_turquoise_rising'), bg: 'bg-cyan-50 dark:bg-cyan-900/50', color: 'text-cyan-600 dark:text-cyan-400', icon: '&#x1F680;' };
+                    if (score >= 6.5) return { 
+                        label: T('status_green_thriving_growing'), 
+                        bgLight: 'bg-green-50', 
+                        bgDark: 'bg-green-900/40', 
+                        colorLight: 'text-green-700', 
+                        colorDark: 'text-green-300', 
+                        icon: '&#x1F31F;' 
+                    };
+                    if (score >= 4.5) return { 
+                        label: T('status_yellow_improving'), 
+                        bgLight: 'bg-yellow-50', 
+                        bgDark: 'bg-yellow-900/40', 
+                        colorLight: 'text-yellow-700', 
+                        colorDark: 'text-yellow-300', 
+                        icon: '&#x1F4C8;' 
+                    };
+                    return { 
+                        label: T('status_turquoise_rising'), 
+                        bgLight: 'bg-cyan-50', 
+                        bgDark: 'bg-cyan-900/40', 
+                        colorLight: 'text-cyan-700', 
+                        colorDark: 'text-cyan-300', 
+                        icon: '&#x1F680;' 
+                    };
                 }
-                if (score >= 7.5) return { label: T('status_green_thriving'), bg: 'bg-green-50 dark:bg-green-900/50', color: 'text-green-600 dark:text-green-400', icon: '&#x1F31F;' };
-                if (score >= 5) return { label: T('status_yellow_stable'), bg: 'bg-yellow-50 dark:bg-yellow-900/50', color: 'text-yellow-600 dark:text-yellow-400', icon: '&#x2696;' };
-                return { label: T('status_turquoise_ready'), bg: 'bg-cyan-50 dark:bg-cyan-900/50', color: 'text-cyan-600 dark:text-cyan-400', icon: '&#x1F504;' };
+                if (score >= 7.5) return { 
+                    label: T('status_green_thriving'), 
+                    bgLight: 'bg-green-50', 
+                    bgDark: 'bg-green-900/40', 
+                    colorLight: 'text-green-700', 
+                    colorDark: 'text-green-300', 
+                    icon: '&#x1F31F;' 
+                };
+                if (score >= 5) return { 
+                    label: T('status_yellow_stable'), 
+                    bgLight: 'bg-yellow-50', 
+                    bgDark: 'bg-yellow-900/40', 
+                    colorLight: 'text-yellow-700', 
+                    colorDark: 'text-yellow-300', 
+                    icon: '&#x2696;' 
+                };
+                return { 
+                    label: T('status_turquoise_ready'), 
+                    bgLight: 'bg-cyan-50', 
+                    bgDark: 'bg-cyan-900/40', 
+                    colorLight: 'text-cyan-700', 
+                    colorDark: 'text-cyan-300', 
+                    icon: '&#x1F504;' 
+                };
             };
 
             // --- RENDER FUNCTIONS ---
             const updateIntroDynamicParts = () => {
+                const isDark = state.theme === 'dark';
+                
                 // Update gender buttons
                 const maleBtn = document.getElementById('gender-male-btn');
                 const femaleBtn = document.getElementById('gender-female-btn');
                 if (maleBtn && femaleBtn) {
-                    maleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${state.gender === 'male' ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`;
-                    femaleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${state.gender === 'female' ? 'bg-pink-600 text-white shadow-lg' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`;
+                    if (state.gender === 'male') {
+                        maleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${isDark ? 'bg-blue-500 text-white' : 'bg-blue-600 text-white'} shadow-lg`;
+                        femaleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`;
+                    } else if (state.gender === 'female') {
+                        femaleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${isDark ? 'bg-pink-500 text-white' : 'bg-pink-600 text-white'} shadow-lg`;
+                        maleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`;
+                    } else {
+                        maleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`;
+                        femaleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${isDark ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`;
+                    }
                 }
 
                 // Update age info box
@@ -433,35 +487,37 @@ const questions = [
             };
 
             const renderIntro = () => {
+                const isDark = state.theme === 'dark';
+                
                 introScreen.innerHTML = `
                     <div class="text-center space-y-8">
                         <div class="relative">
                             <div class="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-3xl opacity-20"></div>
-                            <h1 class="relative text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent" data-translate="app_title">${T('app_title')}</h1>
-                            <p class="relative text-2xl text-gray-600 dark:text-gray-400 mt-2" data-translate="app_subtitle">${T('app_subtitle')}</p>
+                            <h1 class="relative text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent ${isDark ? 'dark:from-purple-400 dark:via-pink-400 dark:to-red-400' : ''}" data-translate="app_title">${T('app_title')}</h1>
+                            <p class="relative text-2xl ${isDark ? 'text-gray-300' : 'text-gray-600'} mt-2" data-translate="app_subtitle">${T('app_subtitle')}</p>
                         </div>
                         
-                        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-3xl shadow-lg border border-amber-200 dark:bg-gray-800 dark:border-gray-700">
-                            <svg class="w-16 h-16 mx-auto mb-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed" data-translate="intro_card_title">${T('intro_card_title')}</p>
-                            <p class="text-md text-gray-600 dark:text-gray-400 mt-4 italic" data-translate="intro_card_quote">${T('intro_card_quote')}</p>
+                        <div class="${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200'} p-8 rounded-3xl shadow-lg border">
+                            <svg class="w-16 h-16 mx-auto mb-4 ${isDark ? 'text-amber-400' : 'text-amber-600'}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="text-lg ${isDark ? 'text-gray-200' : 'text-gray-700'} leading-relaxed" data-translate="intro_card_title">${T('intro_card_title')}</p>
+                            <p class="text-md ${isDark ? 'text-gray-400' : 'text-gray-600'} mt-4 italic" data-translate="intro_card_quote">${T('intro_card_quote')}</p>
                         </div>
 
-                        <div class="max-w-2xl mx-auto text-center text-gray-600 dark:text-gray-400 space-y-4">
+                        <div class="max-w-2xl mx-auto text-center ${isDark ? 'text-gray-300' : 'text-gray-600'} space-y-4">
                             <p>${T('intro_explanation')}</p>
-                            <p class="text-sm font-semibold p-3 bg-yellow-50 dark:bg-yellow-900/50 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                            <p class="text-sm font-semibold p-3 ${isDark ? 'bg-yellow-900/40 border-yellow-700 text-yellow-200' : 'bg-yellow-50 border-yellow-200'} border rounded-lg">
                                 &#x26A0; ${T('intro_disclaimer')}
                             </p>
                         </div>
 
                         <div class="space-y-6 max-w-md mx-auto">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-translate="birth_year_label">${T('birth_year_label')}</label>
-                                <input id="birthYear-input" type="number" value="${state.birthYear}" placeholder="${T('birth_year_placeholder')}" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <label class="block text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'} mb-2" data-translate="birth_year_label">${T('birth_year_label')}</label>
+                                <input id="birthYear-input" type="number" value="${state.birthYear}" placeholder="${T('birth_year_placeholder')}" class="w-full px-4 py-3 border-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'border-gray-300'} rounded-xl focus:border-purple-500 focus:outline-none text-lg">
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-translate="gender_label">${T('gender_label')}</label>
+                                <label class="block text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'} mb-2" data-translate="gender_label">${T('gender_label')}</label>
                                 <div class="flex gap-4">
                                     <button id="gender-male-btn" class="flex-1 py-3 rounded-xl font-medium transition-all">
                                         ${T('gender_male')}
@@ -485,6 +541,7 @@ const questions = [
             };
 
             const renderQuestion = () => {
+                const isDark = state.theme === 'dark';
                 const qIndex = Math.floor((state.step - 1) / 3);
                 const subStep = (state.step - 1) % 3;
                 const questionData = questions[qIndex];
@@ -511,29 +568,29 @@ const questions = [
                         <div class="text-center">
                             <div class="text-6xl mb-4">${category.icon}</div>
                             <h2 class="text-3xl font-bold" style="color: ${category.color}">${category.labels[state.lang]}</h2>
-                            <div class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-4">${timeTitles[questionType]}</div>
-                            <div class="text-xl text-gray-600 dark:text-gray-400 mt-2">${timeSubtitles[questionType]}</div>
+                            <div class="text-3xl font-bold ${isDark ? 'text-gray-100' : 'text-gray-800'} mt-4">${timeTitles[questionType]}</div>
+                            <div class="text-xl ${isDark ? 'text-gray-300' : 'text-gray-600'} mt-2">${timeSubtitles[questionType]}</div>
                         </div>
 
-                        <div class="bg-white p-8 rounded-3xl shadow-xl border-2 dark:bg-gray-800" style="border-color: ${category.color}30">
-                            <p class="text-xl text-gray-800 dark:text-gray-200 font-medium leading-relaxed">${currentQuestionText}</p>
+                        <div class="${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-2'} p-8 rounded-3xl shadow-xl" style="border-color: ${category.color}30">
+                            <p class="text-xl ${isDark ? 'text-gray-100' : 'text-gray-800'} font-medium leading-relaxed">${currentQuestionText}</p>
                             <div class="mt-8">
                                 <input id="question-slider" type="range" min="1" max="10" value="${value}">
                                 <div class="flex justify-between mt-3 text-sm">
-                                    <span class="font-medium text-red-600">1 - ${T('scale_min')}</span>
+                                    <span class="font-medium ${isDark ? 'text-red-400' : 'text-red-600'}">1 - ${T('scale_min')}</span>
                                     <span id="slider-value" class="font-bold text-2xl" style="color: ${category.color}">${value}</span>
-                                    <span class="font-medium text-green-600">10 - ${T('scale_max')}</span>
+                                    <span class="font-medium ${isDark ? 'text-green-400' : 'text-green-600'}">10 - ${T('scale_max')}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex gap-4">
-                            <button id="back-btn" class="px-8 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-all">${T('back_button')}</button>
+                            <button id="back-btn" class="px-8 py-3 ${isDark ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'} rounded-xl font-medium transition-all">${T('back_button')}</button>
                             <button id="next-btn" class="flex-1 py-3 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, ${category.color}, ${category.color}dd)">
                                 ${state.step < totalQuestions ? T('next_button') : T('results_button')}
                             </button>
                         </div>
-                        <div class="text-center text-lg font-semibold text-gray-600 dark:text-gray-400">
+                        <div class="text-center text-lg font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}">
                             ${T('question_progress', { current: state.step, total: totalQuestions })}
                         </div>
                     </div>
@@ -543,6 +600,7 @@ const questions = [
             
             const renderResults = () => {
                 if (!state.results) return;
+                const isDark = state.theme === 'dark';
                 const { scores, lifeSatisfaction, avgPast, avgPresent, avgFuture, pastToPresent } = state.results;
                 const status = getStatus(lifeSatisfaction, pastToPresent);
                 const remainingYears = calculateRemainingYears();
@@ -564,10 +622,10 @@ const questions = [
                 <div id="results-container" class="space-y-8">
                     <div class="text-center">
                         <h2 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">${T('results_title')}</h2>
-                        <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 leading-relaxed">${T('results_subtitle', {remaining: remainingYears})}</p>
+                        <p class="text-3xl font-bold ${isDark ? 'text-gray-100' : 'text-gray-800'} leading-relaxed">${T('results_subtitle', {remaining: remainingYears})}</p>
                     </div>
 
-                    <div class="${status.bg} ${status.color} p-6 sm:p-8 rounded-3xl shadow-xl border-2 dark:border-gray-700">
+                    <div class="${isDark ? status.bgDark : status.bgLight} ${isDark ? status.colorDark : status.colorLight} p-6 sm:p-8 rounded-3xl shadow-xl border-2 ${isDark ? 'border-gray-700' : 'border-transparent'}">
                         <div class="text-center">
                             <div class="text-6xl mb-4">${status.icon}</div>
                             <div class="text-3xl font-bold mb-2">${status.label}</div>
@@ -575,21 +633,21 @@ const questions = [
                             <div class="text-lg opacity-90 mb-4">${T('life_satisfaction_index')}</div>
                             
                             <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-6 text-sm">
-                                <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg"><div class="opacity-75 mb-1">${T('time_past')}</div><div class="text-2xl font-bold">${avgPast.toFixed(1)}</div></div>
-                                <div class="bg-white bg-opacity-70 dark:bg-gray-600/70 p-3 rounded-lg border-2 border-current"><div class="opacity-75 mb-1">${T('time_present')}</div><div class="text-2xl font-bold">${avgPresent.toFixed(1)}</div></div>
-                                <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg"><div class="opacity-75 mb-1">${T('time_future')}</div><div class="text-2xl font-bold">${avgFuture.toFixed(1)}</div></div>
+                                <div class="${isDark ? 'bg-gray-600/80' : 'bg-white bg-opacity-50'} p-3 rounded-lg"><div class="${isDark ? 'opacity-90' : 'opacity-75'} mb-1">${T('time_past')}</div><div class="text-2xl font-bold">${avgPast.toFixed(1)}</div></div>
+                                <div class="${isDark ? 'bg-gray-600/90' : 'bg-white bg-opacity-70'} p-3 rounded-lg border-2 border-current"><div class="${isDark ? 'opacity-90' : 'opacity-75'} mb-1">${T('time_present')}</div><div class="text-2xl font-bold">${avgPresent.toFixed(1)}</div></div>
+                                <div class="${isDark ? 'bg-gray-600/80' : 'bg-white bg-opacity-50'} p-3 rounded-lg"><div class="${isDark ? 'opacity-90' : 'opacity-75'} mb-1">${T('time_future')}</div><div class="text-2xl font-bold">${avgFuture.toFixed(1)}</div></div>
                             </div>
                             
-                            ${pastToPresent > 0.3 ? `<div class="mt-4 bg-green-100 bg-opacity-50 dark:bg-green-800/50 p-3 rounded-lg"><div class="font-bold text-green-800 dark:text-green-300">${T('improvement_text', {points: pastToPresent.toFixed(1)})}</div></div>` : ''}
+                            ${pastToPresent > 0.3 ? `<div class="mt-4 ${isDark ? 'bg-green-800/60 text-green-200' : 'bg-green-100 bg-opacity-50 text-green-800'} p-3 rounded-lg"><div class="font-bold">${T('improvement_text', {points: pastToPresent.toFixed(1)})}</div></div>` : ''}
                         </div>
                     </div>
                     
-                    <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl dark:border dark:border-gray-700">
-                        <h3 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">${T('lifewheel_title')}</h3>
+                    <div class="${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'} p-6 sm:p-8 rounded-3xl shadow-xl">
+                        <h3 class="text-2xl font-bold mb-6 text-center ${isDark ? 'text-gray-100' : 'text-gray-800'}">${T('lifewheel_title')}</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                             ${['past', 'present', 'future'].map((time, idx) => `
                             <div class="text-center">
-                                <div class="font-bold text-sm text-gray-600 dark:text-gray-400 mb-4">${T(`time_${time}`)}</div>
+                                <div class="font-bold text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'} mb-4">${T(`time_${time}`)}</div>
                                 <svg viewBox="0 0 200 200" class="w-full max-w-[180px] mx-auto">
                                     ${categories.map((cat, i) => {
                                         const angle = (i * 360 / categories.length) - 90;
@@ -599,10 +657,10 @@ const questions = [
                                         const y = 100 + radius * Math.sin(angle * Math.PI / 180);
                                         return `<g><line x1="100" y1="100" x2="${x}" y2="${y}" stroke="${cat.color}" stroke-width="2" opacity="0.3" /><circle cx="${x}" cy="${y}" r="4" fill="${cat.color}" /></g>`;
                                     }).join('')}
-                                    <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
-                                    <circle cx="100" cy="100" r="60" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
-                                    <circle cx="100" cy="100" r="40" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
-                                    <circle cx="100" cy="100" r="20" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
+                                    <circle cx="100" cy="100" r="80" fill="none" stroke="${isDark ? '#4b5563' : '#e5e7eb'}" stroke-width="1"/>
+                                    <circle cx="100" cy="100" r="60" fill="none" stroke="${isDark ? '#4b5563' : '#e5e7eb'}" stroke-width="1"/>
+                                    <circle cx="100" cy="100" r="40" fill="none" stroke="${isDark ? '#4b5563' : '#e5e7eb'}" stroke-width="1"/>
+                                    <circle cx="100" cy="100" r="20" fill="none" stroke="${isDark ? '#4b5563' : '#e5e7eb'}" stroke-width="1"/>
                                 </svg>
                             </div>
                             `).join('')}
@@ -610,26 +668,26 @@ const questions = [
                     </div>
 
                     <div class="space-y-4">
-                        <h3 class="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">${T('detailed_analysis_title')}</h3>
+                        <h3 class="text-2xl font-bold text-center mb-6 ${isDark ? 'text-gray-100' : 'text-gray-800'}">${T('detailed_analysis_title')}</h3>
                         ${categories.map(cat => {
                             const score = scores[cat.id];
                             const status = getStatus(score.present, score.trend);
-                            const trendIcon = score.trend > 0.5 ? `<svg class="inline text-green-600" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>` : score.trend < -0.5 ? `<svg class="inline text-red-600" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17l-5-5m0 0l5-5m-5 5h12"></path></svg>` : `<svg class="inline text-gray-600" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>`;
+                            const trendIcon = score.trend > 0.5 ? `<svg class="inline ${isDark ? 'text-green-400' : 'text-green-600'}" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>` : score.trend < -0.5 ? `<svg class="inline ${isDark ? 'text-red-400' : 'text-red-600'}" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17l-5-5m0 0l5-5m-5 5h12"></path></svg>` : `<svg class="inline ${isDark ? 'text-gray-400' : 'text-gray-600'}" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>`;
                             const futureTrend = score.future > score.present ? 'improving' : score.future < score.present ? 'declining' : 'stable';
                             let insightMessage = '';
                             if (futureTrend === 'declining' && score.future < 5) {
-                                insightMessage = `<div class="mt-4 bg-red-100 dark:bg-red-900/50 border border-red-300 dark:border-red-700 p-4 rounded-lg flex items-start gap-3"><div class="text-red-600 dark:text-red-400 flex-shrink-0">&#x26A0;</div><div class="text-sm text-red-800 dark:text-red-300">${T('warning_text')}</div></div>`;
+                                insightMessage = `<div class="mt-4 ${isDark ? 'bg-red-900/50 border-red-700 text-red-200' : 'bg-red-100 border-red-300 text-red-800'} border p-4 rounded-lg flex items-start gap-3"><div class="${isDark ? 'text-red-400' : 'text-red-600'} flex-shrink-0">&#x26A0;</div><div class="text-sm">${T('warning_text')}</div></div>`;
                             }
                             if (futureTrend === 'improving' && score.future >= 8) {
-                                insightMessage = `<div class="mt-4 bg-green-100 dark:bg-green-900/50 border border-green-300 dark:border-green-700 p-4 rounded-lg flex items-start gap-3"><div class="text-green-600 dark:text-green-400 flex-shrink-0">&#x2728;</div><div class="text-sm text-green-800 dark:text-green-300">${T('great_direction_text')}</div></div>`;
+                                insightMessage = `<div class="mt-4 ${isDark ? 'bg-green-900/50 border-green-700 text-green-200' : 'bg-green-100 border-green-300 text-green-800'} border p-4 rounded-lg flex items-start gap-3"><div class="${isDark ? 'text-green-400' : 'text-green-600'} flex-shrink-0">&#x2728;</div><div class="text-sm">${T('great_direction_text')}</div></div>`;
                             }
-                            return `<div class="${status.bg} p-6 rounded-2xl shadow-lg border-2 dark:border-gray-700" style="border-color: ${cat.color}50">
+                            return `<div class="${isDark ? status.bgDark : status.bgLight} p-6 rounded-2xl shadow-lg border-2 ${isDark ? 'border-gray-700' : ''}" style="border-color: ${cat.color}50">
                                 <div class="flex items-center justify-between mb-4">
                                     <div class="flex items-center gap-3">
                                         <span class="text-3xl">${cat.icon}</span>
                                         <div>
-                                            <div class="font-bold text-lg text-gray-800 dark:text-gray-200">${cat.labels[state.lang]}</div>
-                                            <div class="text-sm opacity-75">${status.label}</div>
+                                            <div class="font-bold text-lg ${isDark ? 'text-gray-100' : 'text-gray-800'}">${cat.labels[state.lang]}</div>
+                                            <div class="text-sm ${isDark ? status.colorDark : status.colorLight} font-medium">${status.label}</div>
                                         </div>
                                     </div>
                                     <div class="text-right">
@@ -638,9 +696,9 @@ const questions = [
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3 gap-3 text-sm">
-                                    <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg text-center"><div class="text-gray-600 dark:text-gray-400">${T('time_past')}</div><div class="font-bold text-lg text-gray-800 dark:text-gray-200">${score.past}</div></div>
-                                    <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg text-center"><div class="text-gray-600 dark:text-gray-400">${T('time_present')}</div><div class="font-bold text-lg text-gray-800 dark:text-gray-200">${score.present}</div></div>
-                                    <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg text-center"><div class="text-gray-600 dark:text-gray-400">${T('time_future')}</div><div class="font-bold text-lg text-gray-800 dark:text-gray-200">${score.future}</div></div>
+                                    <div class="${isDark ? 'bg-gray-600/80' : 'bg-white bg-opacity-50'} p-3 rounded-lg text-center"><div class="${isDark ? 'text-gray-200' : 'text-gray-600'}">${T('time_past')}</div><div class="font-bold text-lg ${isDark ? 'text-gray-100' : 'text-gray-800'}">${score.past}</div></div>
+                                    <div class="${isDark ? 'bg-gray-600/80' : 'bg-white bg-opacity-50'} p-3 rounded-lg text-center"><div class="${isDark ? 'text-gray-200' : 'text-gray-600'}">${T('time_present')}</div><div class="font-bold text-lg ${isDark ? 'text-gray-100' : 'text-gray-800'}">${score.present}</div></div>
+                                    <div class="${isDark ? 'bg-gray-600/80' : 'bg-white bg-opacity-50'} p-3 rounded-lg text-center"><div class="${isDark ? 'text-gray-200' : 'text-gray-600'}">${T('time_future')}</div><div class="font-bold text-lg ${isDark ? 'text-gray-100' : 'text-gray-800'}">${score.future}</div></div>
                                 </div>
                                 ${insightMessage}
                             </div>`;
@@ -660,15 +718,15 @@ const questions = [
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl dark:border dark:border-gray-700 space-y-6">
-                        <h3 class="text-2xl font-bold text-center text-gray-800 dark:text-gray-200">${T('next_step_title')}</h3>
+                    <div class="${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white'} p-8 rounded-3xl shadow-xl space-y-6">
+                        <h3 class="text-2xl font-bold text-center ${isDark ? 'text-gray-100' : 'text-gray-800'}">${T('next_step_title')}</h3>
                         <div>
-                            <label for="next-step-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${T('next_step_label')}</label>
-                            <textarea id="next-step-input" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="${T('next_step_placeholder')}">${state.nextStepAction}</textarea>
+                            <label for="next-step-input" class="block text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'} mb-2">${T('next_step_label')}</label>
+                            <textarea id="next-step-input" rows="3" class="w-full p-3 border-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'border-gray-300'} rounded-xl focus:border-purple-500 focus:outline-none text-lg" placeholder="${T('next_step_placeholder')}">${state.nextStepAction}</textarea>
                         </div>
                         <div>
-                            <label for="reminder-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${T('reminder_label')}</label>
-                            <textarea id="reminder-input" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="${T('reminder_placeholder')}">${state.reminderAction}</textarea>
+                            <label for="reminder-input" class="block text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-700'} mb-2">${T('reminder_label')}</label>
+                            <textarea id="reminder-input" rows="3" class="w-full p-3 border-2 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'border-gray-300'} rounded-xl focus:border-purple-500 focus:outline-none text-lg" placeholder="${T('reminder_placeholder')}">${state.reminderAction}</textarea>
                         </div>
                     </div>
 
@@ -806,20 +864,23 @@ const questions = [
             const setLanguage = (lang) => {
                 state.lang = lang;
                 document.documentElement.lang = lang;
+                const isDark = state.theme === 'dark';
                 const huBtn = document.getElementById('lang-hu');
                 const enBtn = document.getElementById('lang-en');
                 if (lang === 'hu') {
                     huBtn.classList.add('bg-white', 'shadow');
-                    huBtn.classList.remove('text-gray-600');
-                    enBtn.classList.remove('bg-white', 'shadow');
-                    enBtn.classList.add('text-gray-600');
+                    huBtn.classList.remove(isDark ? 'text-gray-400' : 'text-gray-600');
+                    huBtn.classList.add('text-gray-800');
+                    enBtn.classList.remove('bg-white', 'shadow', 'text-gray-800');
+                    enBtn.classList.add(isDark ? 'text-gray-400' : 'text-gray-600');
                 } else {
                     enBtn.classList.add('bg-white', 'shadow');
-                    enBtn.classList.remove('text-gray-600');
-                    huBtn.classList.remove('bg-white', 'shadow');
-                    huBtn.classList.add('text-gray-600');
+                    enBtn.classList.remove(isDark ? 'text-gray-400' : 'text-gray-600');
+                    enBtn.classList.add('text-gray-800');
+                    huBtn.classList.remove('bg-white', 'shadow', 'text-gray-800');
+                    huBtn.classList.add(isDark ? 'text-gray-400' : 'text-gray-600');
                 }
-                render(); // Re-render the current view with the new language
+                render();
             };
             
             const setTheme = (theme) => {
@@ -832,8 +893,35 @@ const questions = [
                     dark: document.getElementById('theme-dark')
                 };
                 
+                // Update theme button borders
                 Object.values(buttons).forEach(btn => btn.style.borderColor = 'transparent');
                 buttons[theme].style.borderColor = theme === 'dark' ? '#9ca3af' : '#3b82f6';
+                
+                // Update language switcher backgrounds
+                const langContainer = document.querySelector('.theme-dark-lang-bg');
+                const themeContainer = document.querySelector('.theme-dark-theme-bg');
+                if (theme === 'dark') {
+                    if (langContainer) {
+                        langContainer.classList.remove('bg-gray-200');
+                        langContainer.classList.add('bg-gray-700');
+                    }
+                    if (themeContainer) {
+                        themeContainer.classList.remove('bg-gray-200');
+                        themeContainer.classList.add('bg-gray-700');
+                    }
+                } else {
+                    if (langContainer) {
+                        langContainer.classList.remove('bg-gray-700');
+                        langContainer.classList.add('bg-gray-200');
+                    }
+                    if (themeContainer) {
+                        themeContainer.classList.remove('bg-gray-700');
+                        themeContainer.classList.add('bg-gray-200');
+                    }
+                }
+                
+                // Re-render to apply theme-specific styling
+                render();
             };
 
 
@@ -845,4 +933,3 @@ const questions = [
     </script>
 </body>
 </html>
-
