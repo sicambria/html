@@ -1,0 +1,848 @@
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Élettükör - Life Mirror</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Custom range input styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 12px;
+            border-radius: 9999px;
+            background: linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+            outline: none;
+            opacity: 0.9;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: white;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: white;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Theme styles */
+        .theme-colorful {
+            background-color: #fdf2f8; /* A light pinkish background */
+            color: #1f2937;
+        }
+        .theme-light {
+            background-color: #ffffff;
+            color: #111827;
+        }
+        .theme-dark {
+            background-color: #111827;
+            color: #f9fafb;
+        }
+        .theme-dark .dark\:text-gray-200 { color: #e5e7eb; }
+        .theme-dark .dark\:bg-gray-800 { background-color: #1f2937; }
+        .theme-dark .dark\:bg-gray-700 { background-color: #374151; }
+        .theme-dark .dark\:border-gray-600 { border-color: #4b5563; }
+        .theme-dark .dark\:text-white { color: #ffffff; }
+        .theme-dark .dark\:text-gray-400 { color: #9ca3af; }
+
+        /* Animation for content fade-in */
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #results-container, #app, body {
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                background: white !important;
+                color: black !important;
+            }
+            #results-container > div {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+<body class="theme-colorful">
+
+    <div id="app" class="min-h-screen p-4 sm:p-6 lg:p-8">
+        <!-- Header for controls -->
+        <header class="max-w-6xl mx-auto flex justify-between items-center mb-8 no-print">
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent" data-translate="app_title">Élettükör</h1>
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Language Switcher -->
+                <div class="flex items-center gap-1 rounded-full p-1 bg-gray-200 dark:bg-gray-700">
+                    <button id="lang-hu" class="px-3 py-1 text-sm font-semibold rounded-full bg-white shadow">HU</button>
+                    <button id="lang-en" class="px-3 py-1 text-sm font-semibold rounded-full text-gray-600">EN</button>
+                </div>
+                <!-- Theme Switcher -->
+                <div class="flex items-center gap-1 rounded-full p-1 bg-gray-200 dark:bg-gray-700">
+                    <button id="theme-colorful" title="Színes" class="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 border-2 border-white shadow"></button>
+                    <button id="theme-light" title="Világos" class="w-7 h-7 rounded-full bg-white border-2 border-gray-300"></button>
+                    <button id="theme-dark" title="Sötét" class="w-7 h-7 rounded-full bg-gray-800 border-2 border-gray-600"></button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto py-8">
+            <!-- Intro Screen -->
+            <div id="intro-screen"></div>
+            <!-- Question Screen -->
+            <div id="question-screen" class="hidden"></div>
+            <!-- Results Screen -->
+            <div id="results-screen" class="hidden"></div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- STATE MANAGEMENT ---
+            const state = {
+                step: 0,
+                lang: 'hu',
+                theme: 'colorful',
+                birthYear: '',
+                gender: '',
+                answers: {},
+                results: null,
+                nextStepAction: '',
+                reminderAction: '',
+            };
+
+           
+           // --- TRANSLATIONS & DATA ---
+// All translations have been verified and now exist in both English (en) and Hungarian (hu).
+
+const translations = {
+    hu: {
+        app_title: "Élettükör",
+        app_subtitle: "A halálos ágy perspektíva",
+        intro_card_title: "Képzeld el, hogy most vagy a halálos ágyadon. Visszatekintesz az életedre. Mit látsz? Mit éreznél? Mire lennél büszke? Mit bánnál meg?",
+        intro_card_quote: `"Az életet csak hátrafelé lehet megérteni, de előre kell élni." - Kierkegaard`,
+        intro_explanation: "Ez az eszköz segít egy pillanatra megállni és a 'halálos ágy' perspektívájából visszatekinteni az életed legfontosabb területeire. A cél, hogy őszinte képet kapj arról, hol tartasz most, és merre tartasz a jövőben.",
+        intro_disclaimer: "Az alkalmazás nem menti az adataidat. Kérlek használd a nyomtatás funkciót a legvégén vagy készíts képernyőképet az eredményekről.",
+        birth_year_label: "Születési éved",
+        birth_year_placeholder: "pl. 1985",
+        gender_label: "Nem",
+        gender_male: "Férfi",
+        gender_female: "Nő",
+        age_info_line1: "{age} éves vagy",
+        age_info_line2: "Kb. <span class='font-bold text-2xl'>{remaining}</span> éved van még hátra",
+        age_info_line3: "magyar átlagéletkor alapján",
+        start_button: "Vágjunk neki!",
+        question_title_past: "5 éve ({year_past})",
+        question_title_present: "Most ({year_present})",
+        question_title_future: "5 év múlva ({year_future})",
+        question_subtitle_past: "&#x1F570; Hogyan volt ez 5 évvel ezelőtt?",
+        question_subtitle_present: "&#x1F4CD; Hogyan van ez most?",
+        question_subtitle_future: "&#x1F52E; Hogyan lesz ez 5 év múlva?",
+        scale_min: "Nagyon rossz",
+        scale_max: "Kitűnő",
+        back_button: "Vissza",
+        next_button: "Következő",
+        results_button: "Eredmények",
+        question_progress: "Kérdés {current} / {total}",
+        results_title: "Az életed tükre",
+        results_subtitle: "Kb. <span class='text-purple-600 dark:text-purple-400'>{remaining}</span> éved van még hátra - így élnéd le?",
+        status_green_thriving_growing: "Virágzó és fejlődő",
+        status_yellow_improving: "Javuló pályán",
+        status_turquoise_rising: "Emelkedő",
+        status_green_thriving: "Virágzó",
+        status_yellow_stable: "Stabil",
+        status_turquoise_ready: "Változásra kész",
+        life_satisfaction_index: "Életelégedettségi index (Most)",
+        time_past: "5 éve",
+        time_present: "Most",
+        time_future: "5 év múlva",
+        improvement_text: "&#x2728; {points} pont javulás 5 év alatt!",
+        lifewheel_title: "Életkerék - Három időpont",
+        detailed_analysis_title: "Részletes elemzés",
+        warning_text: "<strong>Figyelmeztetés!</strong> Ha minden így marad, ez az életterület tovább romlik. Változásra van szükség!",
+        great_direction_text: "<strong>Remek irány!</strong> Ha folytatod ezt az utat, ez az életterület virágozni fog!",
+        deathbed_message_title: "Üzenet a halálos ágyadról",
+        deathbed_positive_growth: "&#x1F389; Gratulálok! Az elmúlt 5 évben {points} pontot fejlődtél. Ez nem véletlen - tudatosan építed az életedet!",
+        deathbed_positive_future: "&#x2728; A jövőd még fényesebb lehet! Következő lépés: Válaszd ki azt az 1-2 területet, ahol a legnagyobb potenciált látod, és tedd meg MA az első kis lépést.",
+        deathbed_positive_stagnation: "&#x26A0; Vigyázz! A lendületet nem szabad elveszíteni. Mi az az 1 dolog, amit MA megtehetsz, hogy a pozitív irány folytatódjon?",
+        deathbed_stable_growth: "Az elmúlt 5 évben stabil voltál, de van benned még rengeteg. {future_outlook}",
+        deathbed_stable_future_positive: "És te is érzed ezt - a jövőképed mutatja!",
+        deathbed_stable_future_neutral: "Most itt az idő a változásra.",
+        deathbed_stable_next_step: "&#x1F680; Következő lépés: Válaszd ki azt az 1 területet, ahol a legnagyobb potenciált érzed. Mi az a legkisebb lépés, amit MA megtehetsz? Egy telefonhívás? Egy tervkészítés? Egy beszélgetés?",
+        deathbed_decline: "Az elmúlt 5 év kihívásokkal teli volt. De itt vagy, kitöltötted ezt a tesztet - ez azt mutatja, hogy készen állsz a változásra!",
+        deathbed_decline_next_step: "&#x1F4AA; Következő lépés: NE próbálj mindent egyszerre megváltoztatni! Válassz 1 területet, ahol a legnagyobb fájdalmat érzed. Mi az a legkisebb lépés, amit MA megtehetsz ezen a területen? Írj le 3 lehetséges első lépést, és válaszd a legkönnyebbet!",
+        recipe_for_change_title: "&#x1F4DD; A változás receptje:",
+        recipe_item_1: "1&#xFE0F;&#x20E3; Válassz 1-2 területet (ne többet!)",
+        recipe_item_2: "2&#xFE0F;&#x20E3; Tűzz ki apró, konkrét célokat (pl. \"heti 2x sport\" nem \"egészségesebb leszek\")",
+        recipe_item_3: "3&#xFE0F;&#x20E3; Az első lépés MA történjen meg - bármi, ami elindítja a labdát",
+        recipe_item_4: "4&#xFE0F;&#x20E3; Építs be napi/heti rutinokat - a rendszeresség a kulcs",
+        recipe_item_5: "5&#xFE0F;&#x20E3; Keress támogatást - senki sem változik egyedül",
+        restart_button: "Újrakezdés",
+        next_step_title: "Tervezd meg a következő lépést",
+        next_step_label: "Mi az az EGYETLEN apró, konkrét lépés, amit a következő 24 órában megteszel a célodért?",
+        next_step_placeholder: "Pl. Felhívom Gábort, hogy fussunk kedden.",
+        reminder_label: "Hogyan fogod magad emlékeztetni, hogy biztosan megtedd?",
+        reminder_placeholder: "Pl. Beállítok egy ébresztőt holnap reggel 9-re.",
+        print_button: "Eredmények nyomtatása"
+    },
+    en: {
+        app_title: "Life Mirror",
+        app_subtitle: "The Deathbed Perspective",
+        intro_card_title: "Imagine you are on your deathbed right now. You look back on your life. What do you see? What would you feel? What would you be proud of? What would you regret?",
+        intro_card_quote: `"Life can only be understood backwards; but it must be lived forwards." - Kierkegaard`,
+        intro_explanation: "This tool helps you pause for a moment and look back at the most important areas of your life from the 'deathbed' perspective. The goal is to get an honest picture of where you are now and where you are heading in the future.",
+        intro_disclaimer: "This application does not save your data. Please use the print function at the end or take a screenshot of the results.",
+        birth_year_label: "Your Birth Year",
+        birth_year_placeholder: "e.g. 1985",
+        gender_label: "Gender",
+        gender_male: "Male",
+        gender_female: "Female",
+        age_info_line1: "You are {age} years old",
+        age_info_line2: "You have approx. <span class='font-bold text-2xl'>{remaining}</span> years left",
+        age_info_line3: "based on average life expectancy",
+        start_button: "Let's Start!",
+        question_title_past: "5 years ago ({year_past})",
+        question_title_present: "Now ({year_present})",
+        question_title_future: "In 5 years ({year_future})",
+        question_subtitle_past: "&#x1F570; How was it 5 years ago?",
+        question_subtitle_present: "&#x1F4CD; How is it now?",
+        question_subtitle_future: "&#x1F52E; How will it be in 5 years?",
+        scale_min: "Very Poor",
+        scale_max: "Excellent",
+        back_button: "Back",
+        next_button: "Next",
+        results_button: "See Results",
+        question_progress: "Question {current} / {total}",
+        results_title: "Your Life's Mirror",
+        results_subtitle: "You have approx. <span class='text-purple-600 dark:text-purple-400'>{remaining}</span> years left - is this how you want to live them?",
+        status_green_thriving_growing: "Thriving & Growing",
+        status_yellow_improving: "On an Improving Path",
+        status_turquoise_rising: "Rising",
+        status_green_thriving: "Thriving",
+        status_yellow_stable: "Stable",
+        status_turquoise_ready: "Ready for Change",
+        life_satisfaction_index: "Life Satisfaction Index (Now)",
+        time_past: "5 years ago",
+        time_present: "Now",
+        time_future: "In 5 years",
+        improvement_text: "&#x2728; {points} point improvement in 5 years!",
+        lifewheel_title: "Life Wheel - Three Timestamps",
+        detailed_analysis_title: "Detailed Analysis",
+        warning_text: "<strong>Warning!</strong> If things stay the same, this area of your life will continue to decline. A change is needed!",
+        great_direction_text: "<strong>Great direction!</strong> If you continue on this path, this area of your life will flourish!",
+        deathbed_message_title: "A Message From Your Deathbed",
+        deathbed_positive_growth: "&#x1F389; Congratulations! You have improved by {points} points in the last 5 years. This is no accident - you are consciously building your life!",
+        deathbed_positive_future: "&#x2728; Your future can be even brighter! Next step: Choose the 1-2 areas where you see the greatest potential, and take the first small step TODAY.",
+        deathbed_positive_stagnation: "&#x26A0; Be careful! Don't lose momentum. What is the one thing you can do TODAY to keep the positive trend going?",
+        deathbed_stable_growth: "The past 5 years have been stable, but you have so much more in you. {future_outlook}",
+        deathbed_stable_future_positive: "And you feel it too - your vision for the future shows it!",
+        deathbed_stable_future_neutral: "Now is the time for change.",
+        deathbed_stable_next_step: "&#x1F680; Next step: Choose the 1 area where you feel the greatest potential. What is the smallest step you can take TODAY? A phone call? Making a plan? A conversation?",
+        deathbed_decline: "The past 5 years have been challenging. But you are here, you filled out this test - that shows you are ready for a change!",
+        deathbed_decline_next_step: "&#x1F4AA; Next step: DO NOT try to change everything at once! Choose the 1 area where you feel the most pain. What is the smallest step you can take TODAY in this area? Write down 3 possible first steps and choose the easiest one!",
+        recipe_for_change_title: "&#x1F4DD; The Recipe for Change:",
+        recipe_item_1: "1&#xFE0F;&#x20E3; Choose 1-2 areas (no more!)",
+        recipe_item_2: "2&#xFE0F;&#x20E3; Set small, specific goals (e.g., \"work out twice a week\" not \"get healthier\")",
+        recipe_item_3: "3&#xFE0F;&#x20E3; The first step happens TODAY - anything to get the ball rolling",
+        recipe_item_4: "4&#xFE0F;&#x20E3; Build daily/weekly routines - consistency is key",
+        recipe_item_5: "5&#xFE0F;&#x20E3; Find support - no one changes alone",
+        restart_button: "Start Over",
+        next_step_title: "Plan Your Next Step",
+        next_step_label: "What is the ONE small, specific step you will take in the next 24 hours towards your goal?",
+        next_step_placeholder: "E.g., I will call Gabe to go for a run on Tuesday.",
+        reminder_label: "How will you remind yourself to make sure you do it?",
+        reminder_placeholder: "E.g., I'll set an alarm for 9 AM tomorrow morning.",
+        print_button: "Print Results"
+    }
+};
+
+const categories = [
+    { id: 'health', icon: '&#x1F4AA;', color: '#10b981', labels: { hu: 'Egészség & Vitalitás', en: 'Health & Vitality' } },
+    { id: 'relationships', icon: '❤️', color: '#ef4444', labels: { hu: 'Kapcsolatok & Szeretet', en: 'Relationships & Love' } },
+    { id: 'career', icon: '&#x1F3AF;', color: '#3b82f6', labels: { hu: 'Munka & Küldetés', en: 'Work & Mission' } },
+    { id: 'growth', icon: '&#x1F331;', color: '#8b5cf6', labels: { hu: 'Növekedés & Tanulás', en: 'Growth & Learning' } },
+    { id: 'joy', icon: '&#x2728;', color: '#f59e0b', labels: { hu: 'Öröm & Élvezet', en: 'Joy & Enjoyment' } },
+    { id: 'meaning', icon: '&#x1F54A;', color: '#06b6d4', labels: { hu: 'Értelem & Spiritualitás', en: 'Meaning & Spirituality' } },
+    { id: 'contribution', icon: '&#x1F30D;', color: '#ec4899', labels: { hu: 'Hozzájárulás & Örökség', en: 'Contribution & Legacy' } },
+    { id: 'freedom', icon: '&#x1F98B;', color: '#14b8a6', labels: { hu: 'Szabadság & Autonómia', en: 'Freedom & Autonomy' } }
+];
+
+const questions = [
+    { category: 'health', q: { hu: { past: 'Mennyire voltál büszke a tested erejére és egészségedre 5 éve?', present: 'Most mennyire vagy megelégedve az egészségeddel és energiáddal?', future: 'Ha minden így marad, ahogy most, hol lesz az egészséged 5 év múlva?' }, en: { past: 'How proud were you of your body\'s strength and health 5 years ago?', present: 'How satisfied are you with your health and energy now?', future: 'If everything stays as it is, where will your health be in 5 years?' } } },
+    { category: 'relationships', q: { hu: { past: 'Mennyire érezted 5 éve, hogy mélyen szeretnek és értékelnek?', present: 'Most mennyire vagy körülvéve szeretettel és támogatással?', future: 'Ha minden így marad, milyen mélyek lesznek a kapcsolataid 5 év múlva?' }, en: { past: 'How deeply loved and valued did you feel 5 years ago?', present: 'How surrounded by love and support are you now?', future: 'If everything stays as it is, how deep will your relationships be in 5 years?' } } },
+    { category: 'career', q: { hu: { past: 'Mennyire érezted 5 éve, hogy értelmesen használod a tehetségedet?', present: 'Most mennyire érzed, hogy fontos dolgon dolgozol?', future: 'Ha minden így marad, mennyire leszel elégedett a karriereddel 5 év múlva?' }, en: { past: 'How much did you feel you were using your talents meaningfully 5 years ago?', present: 'How much do you feel you are working on something important now?', future: 'If everything stays as it is, how satisfied will you be with your career in 5 years?' } } },
+    { category: 'growth', q: { hu: { past: 'Mennyire fejlődtél személyként 5 éve?', present: 'Most mennyire tanulsz és fejlődsz folyamatosan?', future: 'Ha minden így marad, mennyire leszel fejlettebb ember 5 év múlva?' }, en: { past: 'How much did you grow as a person 5 years ago?', present: 'How much are you continuously learning and growing now?', future: 'If everything stays as it is, how much more developed will you be as a person in 5 years?' } } },
+    { category: 'joy', q: { hu: { past: 'Mennyire volt tele örömmel és nevetéssel a mindennapjaid 5 éve?', present: 'Most mennyire élvezed az életet nap mint nap?', future: 'Ha minden így marad, mennyire leszel boldog 5 év múlva?' }, en: { past: 'How full of joy and laughter were your everyday life 5 years ago?', present: 'How much do you enjoy life day to day now?', future: 'If everything stays as it is, how happy will you be in 5 years?' } } },
+    { category: 'meaning', q: { hu: { past: 'Mennyire érezted 5 éve, hogy az életed értelmes?', present: 'Most mennyire érzed, hogy nagyobb cél részese vagy?', future: 'Ha minden így marad, mennyire lesz értelmes az életed 5 év múlva?' }, en: { past: 'How meaningful did you feel your life was 5 years ago?', present: 'How much do you feel you are part of a larger purpose now?', future: 'If everything stays as it is, how meaningful will your life be in 5 years?' } } },
+    { category: 'contribution', q: { hu: { past: 'Mennyire érezted 5 éve, hogy pozitív nyomot hagysz a világban?', present: 'Most mennyire járulsz hozzá másokhoz és a közösséghez?', future: 'Ha minden így marad, milyen örökséget hagysz 5 év múlva?' }, en: { past: 'How much did you feel you were leaving a positive mark on the world 5 years ago?', present: 'How much are you contributing to others and the community now?', future: 'If everything stays as it is, what legacy will you leave in 5 years?' } } },
+    { category: 'freedom', q: { hu: { past: 'Mennyire élted 5 éve a saját döntéseid szerint az életedet?', present: 'Most mennyire szabadon választhatsz és autentikusan élhetsz?', future: 'Ha minden így marad, mennyire leszel szabad 5 év múlva?' }, en: { past: 'How much did you live your life according to your own decisions 5 years ago?', present: 'How free are you to choose and live authentically now?', future: 'If everything stays as it is, how free will you be in 5 years?' } } }
+];
+
+           
+           
+            const lifeExpectancy = { male: 73.5, female: 79.8 };
+            const currentYear = 2025;
+            const totalQuestions = questions.length * 3;
+
+            // --- DOM SELECTORS ---
+            const app = document.getElementById('app');
+            const introScreen = document.getElementById('intro-screen');
+            const questionScreen = document.getElementById('question-screen');
+            const resultsScreen = document.getElementById('results-screen');
+            
+            // --- HELPER FUNCTIONS ---
+            const T = (key, replacements = {}) => {
+                let text = translations[state.lang][key] || key;
+                for (const placeholder in replacements) {
+                    text = text.replace(`{${placeholder}}`, replacements[placeholder]);
+                }
+                return text;
+            };
+
+            const calculateAge = () => currentYear - parseInt(state.birthYear);
+            const calculateRemainingYears = () => {
+                const age = calculateAge();
+                const expected = state.gender === 'male' ? lifeExpectancy.male : lifeExpectancy.female;
+                return Math.max(0, Math.round(expected - age));
+            };
+
+            const calculateResults = () => {
+                const scores = {};
+                categories.forEach(cat => {
+                    const past = parseInt(state.answers[`${cat.id}_past`]) || 5;
+                    const present = parseInt(state.answers[`${cat.id}_present`]) || 5;
+                    const future = parseInt(state.answers[`${cat.id}_future`]) || 5;
+                    scores[cat.id] = { past, present, future, trend: present - past };
+                });
+
+                const scoreValues = Object.values(scores);
+                const avgPast = scoreValues.reduce((sum, s) => sum + s.past, 0) / scoreValues.length;
+                const avgPresent = scoreValues.reduce((sum, s) => sum + s.present, 0) / scoreValues.length;
+                const avgFuture = scoreValues.reduce((sum, s) => sum + s.future, 0) / scoreValues.length;
+
+                state.results = {
+                    scores,
+                    lifeSatisfaction: avgPresent,
+                    avgPast,
+                    avgPresent,
+                    avgFuture,
+                    pastToPresent: avgPresent - avgPast,
+                    presentToFuture: avgFuture - avgPresent
+                };
+            };
+            
+            const getStatus = (score, trend) => {
+                if (trend > 0.5) {
+                    if (score >= 6.5) return { label: T('status_green_thriving_growing'), bg: 'bg-green-50 dark:bg-green-900/50', color: 'text-green-600 dark:text-green-400', icon: '&#x1F31F;' };
+                    if (score >= 4.5) return { label: T('status_yellow_improving'), bg: 'bg-yellow-50 dark:bg-yellow-900/50', color: 'text-yellow-600 dark:text-yellow-400', icon: '&#x1F4C8;' };
+                    return { label: T('status_turquoise_rising'), bg: 'bg-cyan-50 dark:bg-cyan-900/50', color: 'text-cyan-600 dark:text-cyan-400', icon: '&#x1F680;' };
+                }
+                if (score >= 7.5) return { label: T('status_green_thriving'), bg: 'bg-green-50 dark:bg-green-900/50', color: 'text-green-600 dark:text-green-400', icon: '&#x1F31F;' };
+                if (score >= 5) return { label: T('status_yellow_stable'), bg: 'bg-yellow-50 dark:bg-yellow-900/50', color: 'text-yellow-600 dark:text-yellow-400', icon: '&#x2696;' };
+                return { label: T('status_turquoise_ready'), bg: 'bg-cyan-50 dark:bg-cyan-900/50', color: 'text-cyan-600 dark:text-cyan-400', icon: '&#x1F504;' };
+            };
+
+            // --- RENDER FUNCTIONS ---
+            const updateIntroDynamicParts = () => {
+                // Update gender buttons
+                const maleBtn = document.getElementById('gender-male-btn');
+                const femaleBtn = document.getElementById('gender-female-btn');
+                if (maleBtn && femaleBtn) {
+                    maleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${state.gender === 'male' ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`;
+                    femaleBtn.className = `flex-1 py-3 rounded-xl font-medium transition-all ${state.gender === 'female' ? 'bg-pink-600 text-white shadow-lg' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`;
+                }
+
+                // Update age info box
+                const ageInfoContainer = document.getElementById('age-info-container');
+                if (ageInfoContainer) {
+                    if (state.birthYear && state.gender) {
+                        const age = calculateAge();
+                        const remaining = calculateRemainingYears();
+                        ageInfoContainer.innerHTML = `
+                            <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-2xl shadow-xl animate-fadeIn">
+                                <div class="text-4xl font-bold">${T('age_info_line1', {age})}</div>
+                                <div class="text-lg mt-2 opacity-90">
+                                    ${T('age_info_line2', {remaining})}
+                                </div>
+                                <div class="text-sm mt-3 opacity-75">${T('age_info_line3')}</div>
+                            </div>`;
+                    } else {
+                        ageInfoContainer.innerHTML = '';
+                    }
+                }
+
+                // Update start button
+                const startBtn = document.getElementById('start-btn');
+                if (startBtn) {
+                    startBtn.disabled = !state.birthYear || !state.gender;
+                }
+            };
+
+            const renderIntro = () => {
+                introScreen.innerHTML = `
+                    <div class="text-center space-y-8">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-3xl opacity-20"></div>
+                            <h1 class="relative text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent" data-translate="app_title">${T('app_title')}</h1>
+                            <p class="relative text-2xl text-gray-600 dark:text-gray-400 mt-2" data-translate="app_subtitle">${T('app_subtitle')}</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-3xl shadow-lg border border-amber-200 dark:bg-gray-800 dark:border-gray-700">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed" data-translate="intro_card_title">${T('intro_card_title')}</p>
+                            <p class="text-md text-gray-600 dark:text-gray-400 mt-4 italic" data-translate="intro_card_quote">${T('intro_card_quote')}</p>
+                        </div>
+
+                        <div class="max-w-2xl mx-auto text-center text-gray-600 dark:text-gray-400 space-y-4">
+                            <p>${T('intro_explanation')}</p>
+                            <p class="text-sm font-semibold p-3 bg-yellow-50 dark:bg-yellow-900/50 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                                &#x26A0; ${T('intro_disclaimer')}
+                            </p>
+                        </div>
+
+                        <div class="space-y-6 max-w-md mx-auto">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-translate="birth_year_label">${T('birth_year_label')}</label>
+                                <input id="birthYear-input" type="number" value="${state.birthYear}" placeholder="${T('birth_year_placeholder')}" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" data-translate="gender_label">${T('gender_label')}</label>
+                                <div class="flex gap-4">
+                                    <button id="gender-male-btn" class="flex-1 py-3 rounded-xl font-medium transition-all">
+                                        ${T('gender_male')}
+                                    </button>
+                                    <button id="gender-female-btn" class="flex-1 py-3 rounded-xl font-medium transition-all">
+                                        ${T('gender_female')}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="age-info-container"></div>
+
+                            <button id="start-btn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                ${T('start_button')}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                addIntroListeners();
+                updateIntroDynamicParts();
+            };
+
+            const renderQuestion = () => {
+                const qIndex = Math.floor((state.step - 1) / 3);
+                const subStep = (state.step - 1) % 3;
+                const questionData = questions[qIndex];
+                if (!questionData) return;
+                
+                const category = categories.find(c => c.id === questionData.category);
+                const questionType = ['past', 'present', 'future'][subStep];
+                const currentQuestionText = questionData.q[state.lang][questionType];
+                const value = state.answers[`${category.id}_${questionType}`] || 5;
+
+                const timeTitles = {
+                    past: T('question_title_past', { year_past: currentYear - 5 }),
+                    present: T('question_title_present', { year_present: currentYear }),
+                    future: T('question_title_future', { year_future: currentYear + 5 }),
+                };
+                const timeSubtitles = {
+                    past: T('question_subtitle_past'),
+                    present: T('question_subtitle_present'),
+                    future: T('question_subtitle_future'),
+                };
+                
+                questionScreen.innerHTML = `
+                    <div class="space-y-8">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">${category.icon}</div>
+                            <h2 class="text-3xl font-bold" style="color: ${category.color}">${category.labels[state.lang]}</h2>
+                            <div class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-4">${timeTitles[questionType]}</div>
+                            <div class="text-xl text-gray-600 dark:text-gray-400 mt-2">${timeSubtitles[questionType]}</div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-3xl shadow-xl border-2 dark:bg-gray-800" style="border-color: ${category.color}30">
+                            <p class="text-xl text-gray-800 dark:text-gray-200 font-medium leading-relaxed">${currentQuestionText}</p>
+                            <div class="mt-8">
+                                <input id="question-slider" type="range" min="1" max="10" value="${value}">
+                                <div class="flex justify-between mt-3 text-sm">
+                                    <span class="font-medium text-red-600">1 - ${T('scale_min')}</span>
+                                    <span id="slider-value" class="font-bold text-2xl" style="color: ${category.color}">${value}</span>
+                                    <span class="font-medium text-green-600">10 - ${T('scale_max')}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <button id="back-btn" class="px-8 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-all">${T('back_button')}</button>
+                            <button id="next-btn" class="flex-1 py-3 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, ${category.color}, ${category.color}dd)">
+                                ${state.step < totalQuestions ? T('next_button') : T('results_button')}
+                            </button>
+                        </div>
+                        <div class="text-center text-lg font-semibold text-gray-600 dark:text-gray-400">
+                            ${T('question_progress', { current: state.step, total: totalQuestions })}
+                        </div>
+                    </div>
+                `;
+                addQuestionListeners();
+            };
+            
+            const renderResults = () => {
+                if (!state.results) return;
+                const { scores, lifeSatisfaction, avgPast, avgPresent, avgFuture, pastToPresent } = state.results;
+                const status = getStatus(lifeSatisfaction, pastToPresent);
+                const remainingYears = calculateRemainingYears();
+                
+                let deathbedMessage = '';
+                if (pastToPresent > 0.5) {
+                    deathbedMessage = `<p>${T('deathbed_positive_growth', { points: pastToPresent.toFixed(1) })}</p>
+                    <p class="font-bold">${state.results.presentToFuture > 0 ? T('deathbed_positive_future') : T('deathbed_positive_stagnation')}</p>`;
+                } else if (pastToPresent > -0.5) {
+                    const futureOutlook = state.results.presentToFuture > 0 ? T('deathbed_stable_future_positive') : T('deathbed_stable_future_neutral');
+                    deathbedMessage = `<p>${T('deathbed_stable_growth', { future_outlook: futureOutlook })}</p>
+                    <p class="font-bold">${T('deathbed_stable_next_step')}</p>`;
+                } else {
+                    deathbedMessage = `<p>${T('deathbed_decline')}</p>
+                    <p class="font-bold">${T('deathbed_decline_next_step')}</p>`;
+                }
+
+                resultsScreen.innerHTML = `
+                <div id="results-container" class="space-y-8">
+                    <div class="text-center">
+                        <h2 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">${T('results_title')}</h2>
+                        <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 leading-relaxed">${T('results_subtitle', {remaining: remainingYears})}</p>
+                    </div>
+
+                    <div class="${status.bg} ${status.color} p-6 sm:p-8 rounded-3xl shadow-xl border-2 dark:border-gray-700">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">${status.icon}</div>
+                            <div class="text-3xl font-bold mb-2">${status.label}</div>
+                            <div class="text-5xl font-bold my-4">${lifeSatisfaction.toFixed(1)}/10</div>
+                            <div class="text-lg opacity-90 mb-4">${T('life_satisfaction_index')}</div>
+                            
+                            <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-6 text-sm">
+                                <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg"><div class="opacity-75 mb-1">${T('time_past')}</div><div class="text-2xl font-bold">${avgPast.toFixed(1)}</div></div>
+                                <div class="bg-white bg-opacity-70 dark:bg-gray-600/70 p-3 rounded-lg border-2 border-current"><div class="opacity-75 mb-1">${T('time_present')}</div><div class="text-2xl font-bold">${avgPresent.toFixed(1)}</div></div>
+                                <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg"><div class="opacity-75 mb-1">${T('time_future')}</div><div class="text-2xl font-bold">${avgFuture.toFixed(1)}</div></div>
+                            </div>
+                            
+                            ${pastToPresent > 0.3 ? `<div class="mt-4 bg-green-100 bg-opacity-50 dark:bg-green-800/50 p-3 rounded-lg"><div class="font-bold text-green-800 dark:text-green-300">${T('improvement_text', {points: pastToPresent.toFixed(1)})}</div></div>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-xl dark:border dark:border-gray-700">
+                        <h3 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">${T('lifewheel_title')}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            ${['past', 'present', 'future'].map((time, idx) => `
+                            <div class="text-center">
+                                <div class="font-bold text-sm text-gray-600 dark:text-gray-400 mb-4">${T(`time_${time}`)}</div>
+                                <svg viewBox="0 0 200 200" class="w-full max-w-[180px] mx-auto">
+                                    ${categories.map((cat, i) => {
+                                        const angle = (i * 360 / categories.length) - 90;
+                                        const score = scores[cat.id][time];
+                                        const radius = (score / 10) * 80;
+                                        const x = 100 + radius * Math.cos(angle * Math.PI / 180);
+                                        const y = 100 + radius * Math.sin(angle * Math.PI / 180);
+                                        return `<g><line x1="100" y1="100" x2="${x}" y2="${y}" stroke="${cat.color}" stroke-width="2" opacity="0.3" /><circle cx="${x}" cy="${y}" r="4" fill="${cat.color}" /></g>`;
+                                    }).join('')}
+                                    <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
+                                    <circle cx="100" cy="100" r="60" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
+                                    <circle cx="100" cy="100" r="40" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
+                                    <circle cx="100" cy="100" r="20" fill="none" stroke="#e5e7eb" stroke-width="1" class="dark:stroke-gray-600"/>
+                                </svg>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">${T('detailed_analysis_title')}</h3>
+                        ${categories.map(cat => {
+                            const score = scores[cat.id];
+                            const status = getStatus(score.present, score.trend);
+                            const trendIcon = score.trend > 0.5 ? `<svg class="inline text-green-600" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>` : score.trend < -0.5 ? `<svg class="inline text-red-600" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17l-5-5m0 0l5-5m-5 5h12"></path></svg>` : `<svg class="inline text-gray-600" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>`;
+                            const futureTrend = score.future > score.present ? 'improving' : score.future < score.present ? 'declining' : 'stable';
+                            let insightMessage = '';
+                            if (futureTrend === 'declining' && score.future < 5) {
+                                insightMessage = `<div class="mt-4 bg-red-100 dark:bg-red-900/50 border border-red-300 dark:border-red-700 p-4 rounded-lg flex items-start gap-3"><div class="text-red-600 dark:text-red-400 flex-shrink-0">&#x26A0;</div><div class="text-sm text-red-800 dark:text-red-300">${T('warning_text')}</div></div>`;
+                            }
+                            if (futureTrend === 'improving' && score.future >= 8) {
+                                insightMessage = `<div class="mt-4 bg-green-100 dark:bg-green-900/50 border border-green-300 dark:border-green-700 p-4 rounded-lg flex items-start gap-3"><div class="text-green-600 dark:text-green-400 flex-shrink-0">&#x2728;</div><div class="text-sm text-green-800 dark:text-green-300">${T('great_direction_text')}</div></div>`;
+                            }
+                            return `<div class="${status.bg} p-6 rounded-2xl shadow-lg border-2 dark:border-gray-700" style="border-color: ${cat.color}50">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-3xl">${cat.icon}</span>
+                                        <div>
+                                            <div class="font-bold text-lg text-gray-800 dark:text-gray-200">${cat.labels[state.lang]}</div>
+                                            <div class="text-sm opacity-75">${status.label}</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-3xl font-bold" style="color: ${cat.color}">${score.present}/10</div>
+                                        ${trendIcon}
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-3 text-sm">
+                                    <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg text-center"><div class="text-gray-600 dark:text-gray-400">${T('time_past')}</div><div class="font-bold text-lg text-gray-800 dark:text-gray-200">${score.past}</div></div>
+                                    <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg text-center"><div class="text-gray-600 dark:text-gray-400">${T('time_present')}</div><div class="font-bold text-lg text-gray-800 dark:text-gray-200">${score.present}</div></div>
+                                    <div class="bg-white bg-opacity-50 dark:bg-gray-700/50 p-3 rounded-lg text-center"><div class="text-gray-600 dark:text-gray-400">${T('time_future')}</div><div class="font-bold text-lg text-gray-800 dark:text-gray-200">${score.future}</div></div>
+                                </div>
+                                ${insightMessage}
+                            </div>`;
+                        }).join('')}
+                    </div>
+
+                    <div class="bg-gradient-to-br from-gray-800 to-black text-white p-8 rounded-3xl shadow-2xl">
+                        <div class="text-3xl mx-auto mb-4 text-center">&#x2728;</div>
+                        <h3 class="text-2xl font-bold text-center mb-4">${T('deathbed_message_title')}</h3>
+                        <div class="space-y-4 text-lg leading-relaxed">${deathbedMessage}</div>
+                        <div class="bg-white bg-opacity-10 p-4 rounded-lg mt-6">
+                            <p class="font-bold text-xl mb-2">${T('recipe_for_change_title')}</p>
+                            <ul class="space-y-2 text-base">
+                                <li>${T('recipe_item_1')}</li><li>${T('recipe_item_2')}</li><li>${T('recipe_item_3')}</li>
+                                <li>${T('recipe_item_4')}</li><li>${T('recipe_item_5')}</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl dark:border dark:border-gray-700 space-y-6">
+                        <h3 class="text-2xl font-bold text-center text-gray-800 dark:text-gray-200">${T('next_step_title')}</h3>
+                        <div>
+                            <label for="next-step-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${T('next_step_label')}</label>
+                            <textarea id="next-step-input" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="${T('next_step_placeholder')}">${state.nextStepAction}</textarea>
+                        </div>
+                        <div>
+                            <label for="reminder-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">${T('reminder_label')}</label>
+                            <textarea id="reminder-input" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none text-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="${T('reminder_placeholder')}">${state.reminderAction}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center space-y-4 sm:space-y-0 sm:flex sm:justify-center sm:gap-4 no-print">
+                        <button id="print-btn" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all">
+                            ${T('print_button')}
+                        </button>
+                        <button id="restart-btn" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all">
+                            ${T('restart_button')}
+                        </button>
+                    </div>
+                </div>
+                `;
+                addResultsListeners();
+            };
+
+           
+            
+           const updateScreenVisibility = () => {
+                [introScreen, questionScreen, resultsScreen].forEach(screen => {
+                    screen.classList.add('hidden');
+                    screen.classList.remove('animate-fadeIn');
+                });
+
+                let activeScreen = null;
+                if (state.step === 0) {
+                    activeScreen = introScreen;
+                } else if (state.step > 0 && state.step <= totalQuestions) {
+                    activeScreen = questionScreen;
+                } else {
+                    activeScreen = resultsScreen;
+                }
+                
+                if (activeScreen) {
+                    activeScreen.classList.remove('hidden');
+                    activeScreen.classList.add('animate-fadeIn');
+                }
+                
+                window.scrollTo(0, 0);
+            };
+
+            const render = () => {
+                console.log('Render called - step:', state.step, 'totalQuestions:', totalQuestions);
+                updateScreenVisibility();
+                if (state.step === 0) {
+                    console.log('Rendering intro');
+                    renderIntro();
+                } else if (state.step > 0 && state.step <= totalQuestions) {
+                    console.log('Rendering question');
+                    renderQuestion();
+                } else {
+                    console.log('Rendering results');
+                    renderResults();
+                }
+            };
+            
+            
+            // --- EVENT LISTENERS ---
+            const addIntroListeners = () => {
+                document.getElementById('birthYear-input').addEventListener('input', e => {
+                    state.birthYear = e.target.value;
+                    updateIntroDynamicParts();
+                });
+                document.getElementById('gender-male-btn').addEventListener('click', () => {
+                    state.gender = 'male';
+                    updateIntroDynamicParts();
+                });
+                document.getElementById('gender-female-btn').addEventListener('click', () => {
+                    state.gender = 'female';
+                    updateIntroDynamicParts();
+                });
+                document.getElementById('start-btn').addEventListener('click', () => {
+                    if (state.birthYear && state.gender) {
+                        state.step = 1;
+                        render();
+                    }
+                });
+            };
+
+            const addQuestionListeners = () => {
+                const slider = document.getElementById('question-slider');
+                const valueLabel = document.getElementById('slider-value');
+                slider.addEventListener('input', e => {
+                    const qIndex = Math.floor((state.step - 1) / 3);
+                    const subStep = (state.step - 1) % 3;
+                    const questionType = ['past', 'present', 'future'][subStep];
+                    const categoryId = questions[qIndex].category;
+                    state.answers[`${categoryId}_${questionType}`] = parseInt(e.target.value);
+                    valueLabel.textContent = e.target.value;
+                });
+                document.getElementById('back-btn').addEventListener('click', () => {
+                    state.step = Math.max(0, state.step - 1);
+                    render();
+                });
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    if (state.step < totalQuestions) {
+                        state.step++;
+                        render();
+                    } else {
+                        calculateResults();
+                        state.step = 999;
+                        render();
+                    }
+                });
+            };
+            
+            const addResultsListeners = () => {
+                document.getElementById('restart-btn').addEventListener('click', () => {
+                    Object.assign(state, {
+                        step: 0,
+                        birthYear: '',
+                        gender: '',
+                        answers: {},
+                        results: null,
+                        nextStepAction: '',
+                        reminderAction: ''
+                    });
+                    render();
+                });
+                document.getElementById('next-step-input').addEventListener('input', e => state.nextStepAction = e.target.value);
+                document.getElementById('reminder-input').addEventListener('input', e => state.reminderAction = e.target.value);
+                document.getElementById('print-btn').addEventListener('click', () => window.print());
+            };
+            
+            const addGlobalListeners = () => {
+                // Language
+                document.getElementById('lang-hu').addEventListener('click', () => setLanguage('hu'));
+                document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+                // Theme
+                document.getElementById('theme-colorful').addEventListener('click', () => setTheme('colorful'));
+                document.getElementById('theme-light').addEventListener('click', () => setTheme('light'));
+                document.getElementById('theme-dark').addEventListener('click', () => setTheme('dark'));
+            };
+            
+            const setLanguage = (lang) => {
+                state.lang = lang;
+                document.documentElement.lang = lang;
+                const huBtn = document.getElementById('lang-hu');
+                const enBtn = document.getElementById('lang-en');
+                if (lang === 'hu') {
+                    huBtn.classList.add('bg-white', 'shadow');
+                    huBtn.classList.remove('text-gray-600');
+                    enBtn.classList.remove('bg-white', 'shadow');
+                    enBtn.classList.add('text-gray-600');
+                } else {
+                    enBtn.classList.add('bg-white', 'shadow');
+                    enBtn.classList.remove('text-gray-600');
+                    huBtn.classList.remove('bg-white', 'shadow');
+                    huBtn.classList.add('text-gray-600');
+                }
+                render(); // Re-render the current view with the new language
+            };
+            
+            const setTheme = (theme) => {
+                state.theme = theme;
+                document.body.className = `theme-${theme}`;
+                
+                const buttons = {
+                    colorful: document.getElementById('theme-colorful'),
+                    light: document.getElementById('theme-light'),
+                    dark: document.getElementById('theme-dark')
+                };
+                
+                Object.values(buttons).forEach(btn => btn.style.borderColor = 'transparent');
+                buttons[theme].style.borderColor = theme === 'dark' ? '#9ca3af' : '#3b82f6';
+            };
+
+
+            // --- INITIALIZATION ---
+            addGlobalListeners();
+            setTheme('colorful');
+            render();
+        });
+    </script>
+</body>
+</html>
+
