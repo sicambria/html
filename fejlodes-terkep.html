@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fejlődést támogató módszertanok térképe | 110+ Módszer</title>
+    <meta name="description" content="110+ fejlesztő, coaching, spirituális és önismereti módszer átlátható összehasonlítása. Tudományos alaptól a spirituális hagyományokig – rendszerszemléletű leírásokkal.">
+    <meta name="keywords" content="önismeret, terápia, pszichológia, coaching, spiritualitás, CBT, ACT, sématerápia, IFS, mindfulness, családállítás, antropozófia, kronobiológia">
+    <meta name="author" content="Nagy Fejlődési Térkép">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Application Structure Plan: A 4-tab dashboard optimalizálva a hatalmas adatmennyiség befogadására. 1. Dashboard az áttekintésért, 2. Meta-Elemzés a mélyebb megértésért (Dilts, Spiráldinamika), 3. Módszertár (immár 114 elemmel, gyorskeresővel, filterekkel), 4. Iránytű dinamikus kérdőív a személyre szabott ajánlásokhoz. -->
+    <!-- Visualization & Content Choices: Chart.js használata a vizuális statisztikákhoz (Dilts szintek, módszerek típusai, bizonyítottság). Biztonságos inline stílusok alkalmazása a menüsoron a kontraszt-hibák elkerülésére. Az adatbázis tiszta HTML dom elemekként generálódik JavaScriptből a gyors szűrés érdekében. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- Chosen Palette: Fenyőzöld (#0e4d4a), Rozsda (#b84c1e), Zsálya (#3d6b52), Krém (#f6f2ec) -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#f6f2ec', ink: '#1a1a1f',
+                        pine: '#0e4d4a', pine2: '#186660', pine3: '#e4f0ef',
+                        rust: '#b84c1e', rust2: '#fdf0e6',
+                        sage: '#3d6b52', sage2: '#e8f3ec',
+                        slate2: '#4a5568',
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', 'Georgia', 'serif'],
+                        body: ['"Source Sans 3"', 'ui-sans-serif', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background:#f6f2ec; color:#1a1a1f; font-family:'Source Sans 3',sans-serif; }
+        
+        /* Biztonsági háttérszínek, ha a Tailwind config nem töltődne be időben */
+        .bg-pine-safe { background-color: #0e4d4a !important; color: #ffffff !important; }
+        .bg-ink-safe { background-color: #1a1a1f !important; color: #ffffff !important; }
+
+        .tab-content { display:none; }
+        .tab-content.active { display:block; animation:fadeUp .3s ease; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .nav-pill { transition:all .2s; }
+        .nav-pill.active { background:white !important; color:#0e4d4a !important; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+        .chart-wrap { position:relative; width:100%; max-width:680px; margin:0 auto; height:300px; }
+        @media(max-width:640px){ .chart-wrap{height:200px} }
+        .method-card { border:1px solid #e2ddd6; background:white; transition:box-shadow .2s,transform .2s; }
+        .method-card:hover { box-shadow:0 6px 24px rgba(14,77,74,.13); transform:translateY(-2px); }
+        .badge { display:inline-flex; align-items:center; gap:3px; padding:3px 9px; border-radius:20px; font-size:.72rem; font-weight:600; white-space:nowrap; }
+        .badge-pszicho { background:#dbeafe; color:#1e40af; }
+        .badge-coaching { background:#fef9c3; color:#854d0e; }
+        .badge-test { background:#d1fae5; color:#065f46; }
+        .badge-spirit { background:#ede9fe; color:#5b21b6; }
+        .badge-brand { background:#fee2e2; color:#991b1b; }
+        .fmt-egyeni { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+        .fmt-paros { background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; }
+        .fmt-csoport { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+        .fmt-mix { background:#f5f3ff; color:#6d28d9; border:1px solid #ddd6fe; }
+        .ev-rct { background:#dcfce7; color:#14532d; border:1px solid #86efac; }
+        .ev-outcomes { background:#ecfdf5; color:#065f46; border:1px solid #6ee7b7; }
+        .ev-clinical { background:#e0f2fe; color:#075985; border:1px solid #7dd3fc; }
+        .ev-suggestive { background:#f3f4f6; color:#374151; border:1px solid #d1d5db; }
+        .dur-hours { background:#fdf4ff; color:#7e22ce; border:1px solid #e9d5ff; }
+        .dur-short { background:#f8fafc; color:#475569; border:1px solid #cbd5e1; }
+        .dur-mid { background:#fafaf0; color:#3d3d00; border:1px solid #d4d478; }
+        .dur-long { background:#fff1f2; color:#9f1239; border:1px solid #fecdd3; }
+        .dur-intensive { background:#fff7ed; color:#7c2d12; border:1px solid #fdba74; }
+        .filter-btn { transition:all .15s; }
+        .filter-btn.active { background:#0e4d4a; color:white; }
+        .note-box { border-left:3px solid; padding:.75rem 1rem; border-radius:0 .5rem .5rem 0; font-size:.82rem; margin-top:.75rem; }
+        .note-misu { background:#fef9c3; border-color:#ca8a04; color:#78350f; }
+        .note-risk { background:#fef2f2; border-color:#dc2626; color:#7f1d1d; }
+        .pyramid-step { transition:.2s; }
+        .pyramid-step:hover { filter:brightness(1.05); }
+        .quiz-option { border:2px solid #e2ddd6; transition:.15s; }
+        .quiz-option:has(input:checked) { border-color:#0e4d4a; background:#e4f0ef; }
+        ::-webkit-scrollbar { width:5px; }
+        ::-webkit-scrollbar-thumb { background:#c8bfb0; border-radius:3px; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+<nav class="sticky top-0 z-50 bg-pine-safe shadow-lg" role="navigation" aria-label="Fő navigáció">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-14 items-center">
+            <a href="#" class="flex items-center gap-2.5 shrink-0">
+                <span class="text-xl">🧭</span>
+                <span class="font-display text-white text-lg font-bold tracking-wide" style="color: white !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">Nagy Fejlődési Térkép</span>
+            </a>
+            <div class="flex items-center gap-1 rounded-full p-1 overflow-x-auto" role="tablist" style="background-color: rgba(255,255,255,0.1);">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-pill active px-3 py-1.5 rounded-full text-white text-sm font-medium whitespace-nowrap">📊 Áttekintés</button>
+                <button onclick="switchTab('models')" id="nav-models" class="nav-pill px-3 py-1.5 rounded-full text-white text-sm font-medium whitespace-nowrap" style="opacity: 0.9;">🧠 Meta-Elemzés</button>
+                <button onclick="switchTab('database')" id="nav-database" class="nav-pill px-3 py-1.5 rounded-full text-white text-sm font-medium whitespace-nowrap" style="opacity: 0.9;">🗂️ Módszertár (114)</button>
+                <button onclick="switchTab('compass')" id="nav-compass" class="nav-pill px-3 py-1.5 rounded-full bg-rust text-white text-sm font-medium whitespace-nowrap">🧭 Iránytű</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+<!-- ══════════════════════════ DASHBOARD ══════════════════════════ -->
+<div id="dashboard" class="tab-content active space-y-8">
+    <section class="relative overflow-hidden rounded-3xl bg-pine-safe p-8 sm:p-12 text-white">
+        <div class="relative z-10 max-w-3xl">
+            <p class="font-medium tracking-wider text-sm uppercase mb-3 text-white" style="opacity: 0.8;">110+ módszer · Rendszerszemléletű elemzés</p>
+            <h1 class="font-display text-4xl sm:text-5xl leading-tight mb-5 text-white">Üdvözlünk a Fejlődési Módszertérképen - terápiás, önismereti & spirituális módszerek világában</h1>
+            <p class="text-lg leading-relaxed text-white" style="opacity: 0.9;">Sokféle út vezet befelé. Ez az alkalmazás nem rangsorolja őket – hanem segít érteni, melyik mit csinál, kire épít, mit tud és mit nem. Hogy Te dönthess, ne a marketing.</p>
+        </div>
+        <div class="absolute right-6 bottom-4 text-9xl font-display select-none" style="opacity: 0.1;">🧭</div>
+    </section>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+            <div class="text-3xl font-display text-pine" id="countTotal">0</div>
+            <div class="text-sm text-gray-500 mt-1">Összesen módszer</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+            <div class="text-3xl font-display text-rust">5</div>
+            <div class="text-sm text-gray-500 mt-1">Kategória</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+            <div class="text-3xl font-display text-sage">6</div>
+            <div class="text-sm text-gray-500 mt-1">Dilts-szint</div>
+        </div>
+        <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm text-center">
+            <div class="text-3xl font-display text-purple-600">4</div>
+            <div class="text-sm text-gray-500 mt-1">Bizonyítottsági szint</div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="font-display text-xl mb-1">Hol dolgoznak a módszerek?</h2>
+            <p class="text-sm text-gray-400 mb-4">Dilts-féle neurológiai szintek szerint</p>
+            <div class="chart-wrap"><canvas id="levelChart"></canvas></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="font-display text-xl mb-1">A piac összetétele</h2>
+            <p class="text-sm text-gray-400 mb-4">Módszerek kategória szerinti aránya</p>
+            <div class="chart-wrap"><canvas id="typeChart"></canvas></div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="font-display text-xl mb-1">Formátum</h2>
+            <p class="text-sm text-gray-400 mb-4">Egyéni, páros vagy csoportos?</p>
+            <div class="chart-wrap" style="height:210px"><canvas id="formatChart"></canvas></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="font-display text-xl mb-1">Időigény</h2>
+            <p class="text-sm text-gray-400 mb-4">Milyen elköteleződést kíván?</p>
+            <div class="chart-wrap" style="height:210px"><canvas id="durationChart"></canvas></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="font-display text-xl mb-1">Bizonyítottság</h2>
+            <p class="text-sm text-gray-400 mb-3">Mennyi van mögötte tudományosan?</p>
+            <div class="chart-wrap" style="height:210px"><canvas id="evidenceChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- Evidence explanation -->
+    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <h3 class="font-display text-xl mb-4 text-pine">Hogyan értsd a „Bizonyítottság" jelzőket?</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <div class="flex gap-3"><span class="badge ev-rct shrink-0 self-start mt-0.5">✅ RCT</span><div><strong>Randomizált kontrollált kísérletek</strong> igazolják a hatékonyságot. Ez a nyugati tudományos módszer legmértebb eszköze – de egy szűk ablak: csak azt látja, ami számokba rendelhető, és ami etikusan randomizálható. Sok mélyen működő módszer kiesik ebből.</div></div>
+            <div class="flex gap-3"><span class="badge ev-outcomes shrink-0 self-start mt-0.5">📊 Kutatás</span><div><strong>Eredménytanulmányok, kohort vizsgálatok</strong> mutatnak pozitív hatást. Nem randomizált, de szisztematikusan mért. A valós klinikai eredmények nagyon konzisztensek.</div></div>
+            <div class="flex gap-3"><span class="badge ev-clinical shrink-0 self-start mt-0.5">🏛 Tradíció</span><div><strong>Évtizedes klinikai tapasztalat</strong>, elméleti koherencia, esettanulmányok. Randomizált vizsgálat nincs mögötte – ez nem jelenti, hogy nem működik. Sok mélyen emberi folyamat nem randomizálható anélkül, hogy elveszítené lényegét.</div></div>
+            <div class="flex gap-3"><span class="badge ev-suggestive shrink-0 self-start mt-0.5">💫 Szuggesztív</span><div><strong>A hatás elsősorban hiten, relaxáción és a kliens–terapeuta bizalmon</strong> múlik. Ez sem értéktelen – a placebo valós neurobiológiai folyamat, az elvárás alakítja az élményt. De fontos tudni, mi az alap.</div></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-4 italic">A bizonyítékok hiánya nem bizonyítja a hatástalanságot. A mért hatás nem jelent mindig mély változást. Mindkét irányban érdemes kritikusan olvasni.</p>
+    </div>
+
+    <div class="bg-rust2 border border-rust/20 rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+        <div class="text-3xl shrink-0">🔍</div>
+        <div class="flex-grow">
+            <h3 class="font-semibold text-rust text-lg mb-1">Marketing vs. Mechanizmus</h3>
+            <p class="text-sm text-gray-700 leading-relaxed">Számos „specifikus rendszer" valódi pszichológiai mechanizmusokat – kognitív átkeretezés, mély relaxáció, szuggesztió, módosult tudatállapot – jelenít meg egyedi narratívával és drága licensz-rendszerben. A mechanizmusok valósak. A „kvantum-DNS-szintű azonnali változás" narratívája marketing. Ezt nem azért írjuk, hogy elcsüggesszen, hanem hogy megvédje az informált választásodat.</p>
+        </div>
+        <button onclick="switchTab('models')" class="shrink-0 bg-rust text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-rust/90 transition">Elemzés →</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════ META-ELEMZÉS ══════════════════════════ -->
+<div id="models" class="tab-content space-y-10">
+    <header>
+        <h2 class="font-display text-4xl text-pine mb-3">Meta-Elemzés</h2>
+        <p class="text-gray-600 max-w-2xl leading-relaxed">Három modell segít érteni, hogy egy módszer milyen lencséje van az emberre – és milyen mélységig ér el. Egyik sem „az egyetlen igaz." Mindhárom különböző szemszögből látja ugyanazt a valóságot.</p>
+    </header>
+
+    <!-- Dilts -->
+    <article class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+        <h3 class="font-display text-2xl text-rust mb-2">1. Dilts-féle Neurológiai Szintek</h3>
+        <p class="text-sm text-gray-500 mb-2">Robert Dilts modellje (Gregory Bateson logikai szintjein alapul). A változás tartósságát nagymértékben meghatározza, hogy melyik szinten történik az intervenció.</p>
+        <p class="text-sm text-gray-500 mb-6">Fontos: „feljebb" nem jelent „jobbat" – csak mást. Egy viselkedési szintű változás néha éppen elég. Egy identitás-szintű intervencióhoz nincs szükség, ha a probléma viselkedési.</p>
+        <div class="space-y-2 max-w-2xl mx-auto">
+            <div class="pyramid-step rounded-lg p-3 text-center text-sm font-semibold" style="background:#1a3f5c;color:white">
+                <span class="font-display text-base">6. Spiritualitás / Vízión túl</span>
+                <span class="block font-normal text-xs opacity-80 mt-0.5">Kihez/Mihez tartozom? — Zen, Vipassana, Nondualitás, Pszichoszintézis, Transzperszonális</span>
+            </div>
+            <div class="pyramid-step rounded-lg p-3 text-center text-sm font-semibold" style="background:#0e4d4a;color:white">
+                <span class="font-display text-base">5. Identitás</span>
+                <span class="block font-normal text-xs opacity-80 mt-0.5">Ki vagyok én? — Pszichoanalízis, IFS, Sématerápia, Enneagram, Sorspszichológia</span>
+            </div>
+            <div class="pyramid-step rounded-lg p-3 text-center text-sm font-semibold" style="background:#186660;color:white">
+                <span class="font-display text-base">4. Értékek / Hiedelmek</span>
+                <span class="block font-normal text-xs opacity-80 mt-0.5">Miért csinálom? — CBT, ACT, Byron Katie The Work, Logoterápia, Koherencia Terápia</span>
+            </div>
+            <div class="pyramid-step rounded-lg p-3 text-center text-sm font-semibold" style="background:#3d6b52;color:white">
+                <span class="font-display text-base">3. Képességek</span>
+                <span class="block font-normal text-xs opacity-80 mt-0.5">Hogyan csinálom? — DBT, NLP, EMK, Motivációs Interjú, Coaching</span>
+            </div>
+            <div class="pyramid-step rounded-lg p-3 text-center text-sm font-semibold" style="background:#4a7c59;color:white">
+                <span class="font-display text-base">2. Viselkedés</span>
+                <span class="block font-normal text-xs opacity-80 mt-0.5">Mit csinálok? — TRE, Autogén tréning, Wim Hof, Jóga, PMR relaxáció</span>
+            </div>
+            <div class="pyramid-step rounded-lg p-3 text-center text-sm font-semibold" style="background:#6b8f71;color:white">
+                <span class="font-display text-base">1. Környezet</span>
+                <span class="block font-normal text-xs opacity-80 mt-0.5">Hol/Mikor? — Tanácsadás, Mediáció, Térrendezés, Életmód-coaching</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- Spiral Dynamics -->
+    <article class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+        <h3 class="font-display text-2xl text-pine mb-2">2. Spiráldinamika — Tudatparadigmák</h3>
+        <p class="text-sm text-gray-500 mb-2">Don Beck és Christopher Cowan modellje (Clare Graves kutatásain alapul). Minden módszer egy adott értékrendből szólítja meg az embert. Nem arról van szó, hogy valamelyik „magasabb rendű" – hanem arról, hogy illeszkedik-e a te aktuális paradigmádhoz. Ha nem illeszkedik, a módszer nem lesz hatékony – sem a módszer, sem te nem hibás ebben.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-center text-xs mt-4">
+            <div class="rounded-xl p-3 bg-purple-100 text-purple-900"><div class="font-bold mb-1">🟣 Lila – Törzsi</div><div class="opacity-75">Rituálé, ősök, mágikus összefüggések. Sámáni hagyományok, karmikus rendszerek, rituálék.</div></div>
+            <div class="rounded-xl p-3 bg-blue-100 text-blue-900"><div class="font-bold mb-1">🔵 Kék – Rend</div><div class="opacity-75">Tekintély, szabályok, hagyomány. Guru–tanítvány viszony, vallási keretek, szigorú rendszerek.</div></div>
+            <div class="rounded-xl p-3 bg-orange-100 text-orange-900"><div class="font-bold mb-1">🟠 Narancs – Siker</div><div class="opacity-75">Ráció, mérhetőség, teljesítmény. Business coaching, CBT, biohacking, célvizualizáció.</div></div>
+            <div class="rounded-xl p-3 bg-green-100 text-green-900"><div class="font-bold mb-1">🟢 Zöld – Közösség</div><div class="opacity-75">Érzések, elfogadás, egyenlőség. EMK, csoportos terápiák, Gestalt, pszichodráma.</div></div>
+            <div class="rounded-xl p-3 bg-yellow-100 text-yellow-900"><div class="font-bold mb-1">🟡 Sárga – Integratív</div><div class="opacity-75">Rendszerszemlélet, komplexitás. IFS, Integrál Pszichológia, Polyvagal-alapú munka, SE.</div></div>
+            <div class="rounded-xl p-3 bg-cyan-100 text-cyan-900"><div class="font-bold mb-1">🩵 Türkiz – Holisztikus</div><div class="opacity-75">Egységtudat, globális felelősség. Dzogcsen, Nondualitás, Transzperszonális, Pszichoszintézis.</div></div>
+        </div>
+    </article>
+
+    <!-- Jung + Vedic -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <article class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-display text-xl text-pine mb-3">3a. Jung: Árnyék, Persona, Individuáció</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">A Persona (amit mutatunk) és az Árnyék (amit elnyomunk) nem ellentétek – hanem egy rendszer. A „fény-módszerek" (kizárólag pozitív gondolkodás, affirmációk) megerősíthetik a Personát, miközben az Árnyék nyomást épít alatta. Az igazi integráció lefele megy: Árnyékmunkán keresztül vezet a Mély-Self felé. Ez rendszerint nem kényelmes, de tartós változást hoz.</p>
+            <div class="mt-4 flex gap-2 text-xs flex-wrap">
+                <span class="bg-yellow-50 border border-yellow-200 px-2 py-1 rounded-lg text-yellow-800">Persona → Látható én</span>
+                <span class="bg-gray-100 border border-gray-200 px-2 py-1 rounded-lg">Árnyék → Elrejtett én</span>
+                <span class="bg-blue-50 border border-blue-200 px-2 py-1 rounded-lg text-blue-800">Self → Integráció</span>
+            </div>
+        </article>
+        <article class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-display text-xl text-pine mb-3">3b. Védikus Kosha Modell</h3>
+            <ul class="space-y-2 text-sm text-gray-700">
+                <li class="flex gap-2"><span class="shrink-0">🟤</span><div><strong>Annamaya (Fizikai test):</strong> Jóga, Bioenergetika, Somatic Experiencing, TRE</div></li>
+                <li class="flex gap-2"><span class="shrink-0">🟡</span><div><strong>Pranamaya (Életenergia):</strong> Wim Hof, Holotróp légzés, Csikung, Pranayama</div></li>
+                <li class="flex gap-2"><span class="shrink-0">🟠</span><div><strong>Manomaya (Elme/Érzelmek):</strong> CBT, DBT, ACT, EMK, Szomatodráma</div></li>
+                <li class="flex gap-2"><span class="shrink-0">🔵</span><div><strong>Vijnanamaya (Bölcsesség/Hit):</strong> The Work, Logoterápia, IFS, Koherencia Terápia</div></li>
+                <li class="flex gap-2"><span class="shrink-0">🟣</span><div><strong>Anandamaya (Lét/Üdvösség):</strong> Vipassana, Nondualitás, mély meditáció</div></li>
+            </ul>
+        </article>
+    </div>
+	
+	   <!-- IFS + Polyvagal deep dives -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <article class="bg-sage2 rounded-2xl border border-sage/20 p-6">
+            <h3 class="font-display text-xl text-sage mb-2">Kiemelt: IFS – Belső Családrendszerek</h3>
+            <p class="text-sm text-gray-700 leading-relaxed">Richard Schwartz modellje szerint mindenkiben élnek „részek" – védők (Menedzserek: kontrollálnak, perfekcionálnak, terveznek) és Tűzoltók (a Száműzöttek fájdalmát oltják: evéssel, dühvel, kábítószerrel). A Száműzöttek a sebesült, korai részek. A Self – az egészséges belső vezető – nem rész, hanem a tiszta jelenlét. Az IFS lényege: a részek nem ellenségek, hanem védők. Megérteni és hazaengedni őket annyi, mint egységet teremteni belül.</p>
+        </article>
+        <article class="bg-pine3 rounded-2xl border border-pine/20 p-6">
+            <h3 class="font-display text-xl text-pine mb-2">Kiemelt: Polyvagal Elmélet</h3>
+            <p class="text-sm text-gray-700 leading-relaxed">Stephen Porges idegtudós 1994-ben írta le az autonóm idegrendszer hierarchiáját: ventroventrális vagus (biztonság, kapcsolódás, humor) → szimpatikus (harc/menekülés) → dorzális vagus (befagyás, dissociáció). Deb Dana tette klinikai eszközzé. Ez megmagyarázza, miért nem lehet „csak elhatározni", hogy valaki ne fagyjon be – az idegrendszer régebbi, mint a szabad akarat. Ma minden traumaterapeuta alapszövege.</p>
+        </article>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════ MÓDSZERTÁR ══════════════════════════ -->
+<div id="database" class="tab-content">
+    <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between mb-6">
+        <div>
+            <h2 class="font-display text-4xl text-pine">Módszertár <span class="text-2xl text-gray-400" id="totalCountHeader">(114)</span></h2>
+            <p class="text-sm text-gray-500 mt-1">Szűrj, keress és böngészd a módszereket – minden releváns dimenzió mentén.</p>
+        </div>
+        <div class="relative">
+            <span class="absolute left-3 top-2.5 text-gray-400 text-sm">🔍</span>
+            <input type="text" id="searchInput" placeholder="Keresés módszerre, nevére…"
+                class="pl-9 pr-4 py-2 border border-gray-200 rounded-xl w-64 text-sm focus:outline-none focus:ring-2 focus:ring-pine/30 bg-white"
+                aria-label="Módszer keresése">
+        </div>
+    </div>
+
+    <div class="space-y-3 mb-6">
+        <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider w-16 shrink-0">Típus</span>
+            <button class="filter-btn active text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-pine text-white" data-group="cat" data-filter="all">Összes</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="cat" data-filter="Pszichológia">Pszichológia</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="cat" data-filter="Coaching/Fejlesztés">Coaching</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="cat" data-filter="Szomatikus/Test">Testközpontú</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="cat" data-filter="Spirituális/Bölcsességi">Spirituális</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-red-200 bg-white text-red-700" data-group="cat" data-filter="Specifikus rendszer">Spec. Rendszer 🏷️</button>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider w-16 shrink-0">Formátum</span>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="format" data-filter="Egyéni">👤 Egyéni</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="format" data-filter="Páros">👥 Páros</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="format" data-filter="Csoportos">🧑‍🤝‍🧑 Csoportos</button>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider w-16 shrink-0">Időigény</span>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="duration" data-filter="Néhány óra">✨ Néhány óra</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="duration" data-filter="Rövid">⚡ Rövid</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="duration" data-filter="Középtávú">📅 Középtávú</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="duration" data-filter="Hosszútávú">🌱 Hosszútávú</button>
+            <button class="filter-btn text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white" data-group="duration" data-filter="Intenzív">🔥 Intenzív</button>
+        </div>
+    </div>
+
+    <div class="text-sm text-gray-400 mb-4" id="countDisplay" aria-live="polite"></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="methodsGrid"></div>
+</div>
+
+<!-- ══════════════════════════ IRÁNYTŰ ══════════════════════════ -->
+<div id="compass" class="tab-content">
+    <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-8">
+            <div class="text-5xl mb-3">🧭</div>
+            <h2 class="font-display text-4xl text-rust mb-3">Személyes Iránytű</h2>
+            <p class="text-gray-600">3 kérdés. Rendszerszemléletű ajánlás. Ez nem diagnózis – hanem egy tájolás, ami segít kérdezni.</p>
+        </div>
+        <div id="quizContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+            <div class="flex gap-2 mb-8">
+                <div id="prog1" class="h-1.5 flex-1 rounded-full bg-rust"></div>
+                <div id="prog2" class="h-1.5 flex-1 rounded-full bg-gray-200"></div>
+                <div id="prog3" class="h-1.5 flex-1 rounded-full bg-gray-200"></div>
+            </div>
+            <fieldset id="step1" class="quiz-step">
+                <legend class="font-display text-2xl mb-5">1. Hol érzed az elakadást leginkább?</legend>
+                <div class="space-y-3">
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="focus" value="mental" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Gondolati szinten</strong><br><span class="text-sm text-gray-500">Ismétlődő negatív gondolatok, szorongás, döntésképtelenség, fóbiák, OCD-szerű minták.</span></div></label>
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="focus" value="emotional" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Érzelmi / kapcsolati szinten</strong><br><span class="text-sm text-gray-500">Ismétlődő párkapcsolati vagy munkahelyi minták, kommunikációs nehézségek, érzelemszabályozás.</span></div></label>
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="focus" value="somatic" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Testi / traumás szinten</strong><br><span class="text-sm text-gray-500">Krónikus feszültség, pszichoszomatikus tünetek, befagyás, hypervigilancia, feldolgozatlan emlékek.</span></div></label>
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="focus" value="existential" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Identitás / egzisztenciális szinten</strong><br><span class="text-sm text-gray-500">„Ki vagyok én?", értelem-hiány, életközépi fordulat, karrier-elakadás, célok elveszítése.</span></div></label>
+                </div>
+                <div class="flex justify-end mt-6"><button onclick="nextStep(2)" class="bg-pine-safe px-6 py-2.5 rounded-xl font-medium transition" style="border: none;">Következő →</button></div>
+            </fieldset>
+            <fieldset id="step2" class="quiz-step hidden">
+                <legend class="font-display text-2xl mb-5">2. Hogyan szereted megismerni a dolgokat?</legend>
+                <div class="space-y-3">
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="worldview" value="rational" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Bizonyítékokra, logikára támaszkodva</strong><br><span class="text-sm text-gray-500">Fontos, hogy a módszernek legyen tudományos alapja. A ráció az elsődleges kapum.</span></div></label>
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="worldview" value="integrative" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Nyitottan, a tapasztalatra is figyelve</strong><br><span class="text-sm text-gray-500">A tudomány fontos, de a test, a jelenlét és a belső tapasztalat is érvényes adatok.</span></div></label>
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="worldview" value="spiritual" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Spirituálisan, a transzcendens valóságát elfogadva</strong><br><span class="text-sm text-gray-500">Számomra a fizikai valóság csak egy réteg. Szívesen dolgozom energetikai, rituális vagy archetipikus keretekben is.</span></div></label>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button onclick="nextStep(1)" class="px-5 py-2.5 rounded-xl border text-gray-600 hover:bg-gray-50">← Vissza</button>
+                    <button onclick="nextStep(3)" class="bg-pine-safe px-6 py-2.5 rounded-xl font-medium" style="border: none;">Következő →</button>
+                </div>
+            </fieldset>
+            <fieldset id="step3" class="quiz-step hidden">
+                <legend class="font-display text-2xl mb-5">3. Mekkora az elköteleződésed?</legend>
+                <div class="space-y-3">
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="effort" value="quick" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Konkrét problémát akarok kezelni</strong><br><span class="text-sm text-gray-500">Pár hetes vagy hónapos folyamat. Eszközöket, technikákat, szemléletváltást keresek.</span></div></label>
+                    <label class="quiz-option flex gap-4 p-4 rounded-xl cursor-pointer"><input type="radio" name="effort" value="deep" class="mt-0.5 h-5 w-5 accent-pine shrink-0"><div><strong>Mélyre akarok menni</strong><br><span class="text-sm text-gray-500">Hajlandó vagyok hosszabb folyamatra, gyökerek feltárására, a személyiségszerkezet átrendezésére.</span></div></label>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button onclick="nextStep(2)" class="px-5 py-2.5 rounded-xl border text-gray-600 hover:bg-gray-50">← Vissza</button>
+                    <button onclick="calculateResult()" class="bg-rust text-white px-6 py-2.5 rounded-xl font-medium hover:bg-rust/90">Mutasd az irányt ✨</button>
+                </div>
+            </fieldset>
+        </div>
+        <div id="quizResult" class="hidden mt-6 bg-white rounded-2xl shadow-sm border border-pine/20 overflow-hidden">
+            <div class="bg-pine-safe p-6 text-white"><div class="text-2xl mb-1">🧭</div><h3 class="font-display text-2xl">Az Iránytű ajánlása</h3></div>
+            <div class="p-6 space-y-5">
+                <p id="resultText" class="text-gray-800 leading-relaxed"></p>
+                <div class="bg-pine3 rounded-xl p-4">
+                    <h4 class="font-semibold text-pine mb-2 text-sm uppercase tracking-wide">Ezeket a módszereket érdemes megnézned</h4>
+                    <ul id="resultMethods" class="space-y-1.5 text-sm text-gray-800"></ul>
+                </div>
+                <div class="bg-rust2 rounded-xl p-4 border-l-4 border-rust">
+                    <h4 class="font-semibold text-rust mb-1 text-sm">Reális elvárások</h4>
+                    <p id="resultExpectations" class="text-sm text-gray-700"></p>
+                </div>
+                <button onclick="resetQuiz()" class="text-pine text-sm font-medium hover:underline">🔄 Újra kezdem</button>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+
+<footer class="bg-ink-safe mt-16 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-start gap-6">
+        <div>
+            <div class="flex items-center gap-2 mb-3"><span>🧭</span><span class="font-display text-lg">Nagy Fejlődési Térkép</span></div>
+            <p class="text-sm text-gray-400 max-w-sm">Rendszerszemléletű útmutató a terápiás és önismereti módszerek világában. Edukációs célú forrás.<br/>
+			<strong>Creative Commons CC-BY-SA 4.0 Nevezd meg! Így Add Tovább!</strong>
+			
+			</p>
+        </div>
+        <div class="text-sm text-gray-500">
+            <p class="font-medium text-gray-300 mb-2">Fontos</p>
+            <p class="max-w-xs">Klinikai depresszió, aktív traumaszimptómák, súlyos szorongás vagy pszichiátriai állapot esetén keresd szakvizsgázott klinikai pszichológus vagy pszichiáter segítségét.</p>
+            <p class="mt-3 text-gray-600">Frissítve: 2026. március</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const evidenceLabels = {
+    "rct":       "✅ RCT / Meta-analízis",
+    "outcomes":  "📊 Eredménykutatás",
+    "clinical":  "🏛 Klinikai tradíció",
+    "suggestive":"💫 Szuggesztív alap"
+};
+const durationLabels = {
+    "Néhány óra":"✨ Néhány óra",
+    "Rövid":     "⚡ Rövid (1–3 hó)",
+    "Középtávú": "📅 Középtávú (3–12 hó)",
+    "Hosszútávú":"🌱 Hosszútávú (1+ év)",
+    "Intenzív":  "🔥 Intenzív (1–5 nap)"
+};
+const formatIcon = {"Egyéni":"👤","Páros":"👥","Csoportos":"🧑‍🤝‍🧑"};
+const catIcons = {"Pszichológia":"🧠","Coaching/Fejlesztés":"🎯","Szomatikus/Test":"🌿","Spirituális/Bölcsességi":"✨","Specifikus rendszer":"🏷️"};
+const levelDepth = {"Környezet":1,"Viselkedés":2,"Képességek":3,"Hiedelmek":4,"Identitás":5,"Spiritualitás":6};
+
+const methodsData = [
+// ── PSZICHOLÓGIA ──────────────────────────────────────────────────
+{name:"Kognitív Viselkedésterápia (CBT)", key:"Aaron Beck, Albert Ellis", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"rct",
+desc:"Az ABC-modell magja: egy esemény (A) nem közvetlenül okoz érzelmi következményt (C) – közbül van egy hiedelem (B), amelyet vizsgálni lehet. A CBT azonosítja és módosítja a torzított gondolkodási mintákat (katasztrofizálás, fekete-fehér gondolkodás). Strukturált, naplózáson és konkrét házi feladatokon alapul. Szorongás, depresszió, fóbiák területén a legtöbb RCT-vel rendelkező módszer."},
+
+{name:"Elfogadás és Elköteleződésterápia (ACT)", key:"Steven Hayes", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"rct",
+desc:"A CBT harmadik hullámának csúcsa. Nem a fájdalmas gondolatok tartalmát változtatja meg, hanem a viszonyulásodat hozzájuk – miközben az értékeid felé mozogsz. Hat alapfolyamata (kognitív defúzió, jelenlét, értékek stb.) a pszichológiai rugalmasságot fejleszti."},
+
+{name:"Dialektikus Viselkedésterápia (DBT)", key:"Marsha Linehan", category:"Pszichológia", level:"Képességek", format:"Egyéni", duration:"Hosszútávú", evidence:"rct",
+desc:"Négy készségmodul: mindfulness, distressztűrés, érzelemszabályozás, és interperszonális hatékonyság. Az egyéni terápiát rendszerint csoportos készségedzés egészíti ki. Az érzelmi intenzitás és impulzivitás (pl. BPD) kezelésének egyik legbizonyítottabb rendszere."},
+
+{name:"Sématerápia", key:"Jeffrey Young", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"outcomes",
+desc:"A CBT mélyebb rétege: a gyermekkori kielégítetlen alapszükségletekből kialakult korai maladaptív sémát térképezi fel és gyógyítja. Séma-módusok párbeszéde és a 'korlátozott reparentálás' különlegessége. Krónikus depresszió, kötődési sebek esetén erős."},
+
+{name:"IFS (Belső Családrendszerek)", key:"Richard Schwartz", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"outcomes",
+desc:"A személyiség belső pluralizmusát feltételezi: Menedzserek, Tűzoltók és Száműzöttek (a sebesült, korai részek). A Self az egészséges belső vezető. A cél: a részek bizalmát megnyerni, megérteni, hogy nem ellenségek, hanem védelmezők, majd integrálni őket."},
+
+{name:"Személyközpontú Terápia (Rogers)", key:"Carl Rogers", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"rct",
+desc:"Három szükséges és elégséges feltétel: empátia, feltétel nélküli pozitív elfogadás és kongruencia (hitelesség). A terapeuta nem tanácsol – tükröz. Egy kapcsolat, ahol biztonságos megmutatkozni. Az egész mai pszichoterápia etikai gerince."},
+
+{name:"Satir-modell (Családterápia)", key:"Virginia Satir", category:"Pszichológia", level:"Identitás", format:"Csoportos", duration:"Középtávú", evidence:"clinical",
+desc:"Öt kommunikációs 'stressz-állás' modellje. A 'Parts Party' (belső részek párbeszéde) az IFS előfutára. Alaptézise: az önbecsülés az egészség és a kapcsolatok minőségének forrása."},
+
+{name:"Compassionate Inquiry (Együttérző Faggatózás)", key:"Máté Gábor", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Minden krónikus minta (addikció, betegség, perfekcionizmus) egy korai adaptációs stratégia, amely egykor megvédte a személyt. A módszer nem az akaraterőre épít, hanem az együttérző kérdezéssel megtalálja a mögöttes fájdalmat és traumát."},
+
+{name:"Érzelemfókuszú Terápia (EFT)", key:"Sue Johnson", category:"Pszichológia", level:"Identitás", format:"Páros", duration:"Középtávú", evidence:"rct",
+desc:"A kötődéselméleten (Bowlby) alapul. A párkapcsolati problémákat nem jellemhibának, hanem az érzelmi kötelék megszakadásának tekinti. A legbizonyítottabb párkapcsolati modell (Nem azonos az EFT-kopogtatással)."},
+
+{name:"Gottman-módszer", key:"John és Julie Gottman", category:"Pszichológia", level:"Képességek", format:"Páros", duration:"Középtávú", evidence:"rct",
+desc:"A 'Négy Lovas' (kritika, megvetés, defenzivitás, falépítés) magas pontossággal jelzi előre a válást. A Sound Relationship House modellje: barátság, konfliktuskezelés, életálmok tisztelete. Az 5:1 arány az alapelv."},
+
+{name:"Imago párterápia", key:"Harville Hendrix", category:"Pszichológia", level:"Identitás", format:"Páros", duration:"Középtávú", evidence:"clinical",
+desc:"Az 'imago' a korai kötődési sérelmek tudattalan összege, amelyet a partner tükröz. Az Imago dialógus három lépése: tükrözés, validálás, empátia. A párt gyógyulási térré alakítja meggyőzés nélkül."},
+
+{name:"Rendszerszemléletű családterápia", key:"Bateson, Watzlawick", category:"Pszichológia", level:"Identitás", format:"Csoportos", duration:"Középtávú", evidence:"outcomes",
+desc:"A tünet a rendszer (kommunikáció, határok, lojalitások, szabályok) dinamikájában van. Különösen hatékony, ha az egyéni terápia elakad – mert a kapcsolati mező tart fenn egy mintát."},
+
+{name:"Gestalt-terápia", key:"Fritz Perls", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Az itt-és-most van a fókuszban, nem a magyarázat. Kísérletező technikái – az üres szék, a szerepcsere – a tapasztalást hozzák el, nem az analízist. Erős az elakadt érzelmek feltárásában."},
+
+{name:"EMDR", key:"Francine Shapiro", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"rct",
+desc:"A traumatikus emlék elszigetelten maradt az agyban, feldolgozatlanul. A protokoll bilaterális stimulációval (szemmozgás, hang) aktiválja a memória újrakonszolidációs folyamatát. Kiemelt PTSD kezelési módszer."},
+
+{name:"Tranzakcióanalízis (TA)", key:"Eric Berne", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Három énállapot (Szülő – Felnőtt – Gyermek), az életforgatókönyv és az emberi 'játszmák' (ismétlődő forgatókönyvek) elmélete. A cél a tiszta, Felnőtt-szintű kapcsolatba lépés."},
+
+{name:"Narratív terápia", key:"Michael White", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"A probléma nem te vagy – a probléma a probléma. Az externalizáció technikája lehetővé teszi, hogy a szorongással, mint külső 'karakterrel' dialogizálj. Átírja a problémaközpontú belső történetet."},
+
+{name:"Logoterápia", key:"Viktor Frankl", category:"Pszichológia", level:"Spiritualitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"A holokauszt-túlélő pszichiáter egzisztenciális terápiája: minden körülmények között megmarad a szabadság a szenvedéshez való viszonyulásra. Az ember elsősorban értelemre (meaning) törekszik."},
+
+{name:"Megoldásközpontú Rövidterápia (SFBT)", key:"Steve de Shazer", category:"Pszichológia", level:"Képességek", format:"Egyéni", duration:"Rövid", evidence:"rct",
+desc:"A problémát nem elemzi – azt kérdezi: mikor nincs ott? A 'csodakérdés' a jövőorientált változás egyik legelegánsabb eszköze. Ritkán tart tovább 5-10 ülésnél."},
+
+{name:"Motivációs Interjú (MI)", key:"William Miller", category:"Pszichológia", level:"Képességek", format:"Egyéni", duration:"Rövid", evidence:"rct",
+desc:"Az ambivalencia feloldásának mestere. Az OARS technikák a változásra irányuló belső motivációt erősítik, anélkül, hogy a terapeuta nyomást gyakorolna. Addikciók, életmódváltás terén elsőrangú."},
+
+{name:"Pszichodráma", key:"J.L. Moreno", category:"Pszichológia", level:"Hiedelmek", format:"Csoportos", duration:"Hosszútávú", evidence:"clinical",
+desc:"A belső világ 'megszínesítése' cselekvésen keresztül. A protagonista élethelyzetét szociodramatikus térben jeleníti meg a segédénekkel. A katarzis az integráló megértésből fakad."},
+
+{name:"Éber figyelemre épülő kognitív terápia (MBCT)", key:"Segal, Williams", category:"Pszichológia", level:"Képességek", format:"Csoportos", duration:"Rövid", evidence:"rct",
+desc:"A Mindfulness és a CBT ötvözete a depresszió visszaesésének megelőzésére. A 'decentering' – a gondolatoktól való érzelmi távolság – képességét fejleszti kiemelkedő hatékonysággal."},
+
+{name:"Tudatos jelenlét (Mindfulness / MBSR)", key:"Jon Kabat-Zinn", category:"Pszichológia", level:"Képességek", format:"Csoportos", duration:"Rövid", evidence:"rct",
+desc:"Buddhista jelenlét-meditáció vallásmentesített, klinikai változata (testszkennelés, meditáció). A stressz és a szorongás területén az egyik legtöbbet vizsgált módszer. Készség, amely gyakorlást igényel."},
+
+{name:"Együttérzés-fókuszú Terápia (CFT)", key:"Paul Gilbert", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"outcomes",
+desc:"Evolúciós pszichológiai alap. Sok embernek erős a fenyegetés-rendszere, de hiányos a megnyugtatási rendszere (korai kötődési hiányok miatt). A CFT ezt az egyensúlyt állítja helyre. Az önkritika fő ellenszere."},
+
+{name:"Mentalizáció-alapú Terápia (MBT)", key:"Peter Fonagy", category:"Pszichológia", level:"Képességek", format:"Egyéni", duration:"Hosszútávú", evidence:"rct",
+desc:"Tudni, hogy magadnak és másoknak belső mentális állapotai vannak. Trauma esetén ez a képesség sérül. Az MBT a kötődési kapcsolatban fejleszti ezt újra (különösen Borderline esetén alkalmazott)."},
+
+{name:"Interperszonális Neurobiológia (IPNB)", key:"Dan Siegel", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Azt vizsgálja, hogyan formálja a kapcsolat az agyat. Az 'Ablak a toleranciára' (amelyen belül az idegrendszer integráltan működik) fogalma innen ered. Az agyi területek integrációjára fókuszál."},
+
+{name:"Koherenciaterápia", key:"Bruce Ecker", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"A tünet nem hiba, hanem egy belső koherens megoldás (pl. az önszabotázs implicit biztonságot ad). Feltárja az implicit logikát, majd a memória újrakonszolidációs folyamatával módosítja azt."},
+
+{name:"Fókuszolás (Focusing)", key:"Eugene Gendlin", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Azok a kliensek fejlődnek a legjobban, akik képesek figyelni a testükben érzett bizonytalan, szavak előtti érzéstartalmakra (felt sense). Hat lépésből álló finom belső figyelmi technika."},
+
+{name:"Racionális-Emotív Viselkedésterápia (REBT)", key:"Albert Ellis", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Rövid", evidence:"rct",
+desc:"A CBT konfrontatívabb elődje. Az irracionális hiedelmeket ('kellezés', katasztrofizálás) kérdőjelezi meg. Alapfilozófiája: az élet nehéz, de elviselhető; az önelfogadás feltétel nélküli."},
+
+{name:"Pszichoanalízis / Jungi Analitikus Pszichológia", key:"Freud, Jung", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"A tudattalan dinamikáinak feltárása. Jung kibővítette ezt az Archetípusokkal (Árnyék, Persona, Self) és az Individuáció útjával. Lassú, de kivételesen mély folyamat."},
+
+{name:"Enneagram", key:"Gurdjieff, Naranjo", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"9 alapkarakter-struktúra, amely nem azt írja le, ki vagy – hanem azt, hogyan védekezik az ego a fájdalom ellen a korai fixációk (passziók) révén. Rendkívül tűpontos mélylélektani térkép."},
+
+{name:"Pozitív Pszichológia", key:"Martin Seligman", category:"Pszichológia", level:"Képességek", format:"Csoportos", duration:"Középtávú", evidence:"rct",
+desc:"Nem a betegség kezelése, hanem a virágzás tudománya. A PERMA-modell pillérei: Pozitív érzelmek, Bevonódás (flow), Kapcsolatok, Értelem, Teljesítmény. Az erőforrásokra fókuszál."},
+
+{name:"Ericksoni hipnózis", key:"Milton Erickson", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"outcomes",
+desc:"Indirekt, metaforikus szuggesztiókkal éri el, hogy a kritikai elme lejjebb kapcsoljon, és a tudattalan erőforrásai aktiválódjanak. Nem direktív parancsokat ad, hanem mesél."},
+
+{name:"Transzperszonális Pszichológia", key:"Stanislav Grof", category:"Pszichológia", level:"Spiritualitás", format:"Csoportos", duration:"Hosszútávú", evidence:"clinical",
+desc:"A spirituális élményeket (csúcsélmények, halálközeli tapasztalatok) beemeli a pszichológiába, nem patologizálja őket. Az ego nem végállomás, csupán egy állomás a Self felé."},
+
+{name:"Integrál Pszichológia", key:"Ken Wilber", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"Az AQAL meta-keret, amely a keleti spiritualitást és a nyugati pszichológiát integrálja (kvadránsok, szintek, vonalak). Megkülönbözteti a pre-racionális és a transz-racionális állapotokat."},
+
+{name:"Neurofeedback", key:"Barry Sterman", category:"Pszichológia", level:"Viselkedés", format:"Egyéni", duration:"Hosszútávú", evidence:"outcomes",
+desc:"Az agy valós idejű EEG-visszajelzése segítségével az idegrendszer megtanulja az optimális aktivitási mintákat. Operáns kondicionálás ADHD, szorongás, alvászavar kezelésére."},
+
+{name:"Biofeedback / HRV tréning", key:"Les Fehmi", category:"Pszichológia", level:"Viselkedés", format:"Egyéni", duration:"Középtávú", evidence:"rct",
+desc:"Fiziológiai jelek (szívritmus-variabilitás, légzés) valós idejű visszajelzésével a vegetatív idegrendszer önálló szabályozása tanulható meg. Magas bizonyítottság stresszkezelésre."},
+
+{name:"Autogén Tréning (AT)", key:"J.H. Schultz", category:"Pszichológia", level:"Viselkedés", format:"Egyéni", duration:"Rövid", evidence:"rct",
+desc:"Hat standard formula önszuggesztiójával (nehézség, meleg, szív stb.) az autonóm idegrendszer mélyrelaxációra kondicionálható. Orvosi kutatásokkal igazolt, otthon is végezhető."},
+
+{name:"Drámaterápia", key:"Sue Jennings", category:"Pszichológia", level:"Hiedelmek", format:"Csoportos", duration:"Középtávú", evidence:"clinical",
+desc:"Irodalmi szövegek, bábok, maszkok és fiktív szerepek révén az 'esztétikai távolság' lehetővé teszi az érzelmek biztonságos kifejezését anélkül, hogy a saját élettörténetet direkten kiteregetnénk."},
+
+{name:"Művészetterápia", key:"Edith Kramer", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Vizuális alkotás (festés, agyag) mint a szavakba nem öntött tartalmak biztonságos megnyilvánulása. A kész mű a belső állapot látható nyoma, amelyről párbeszéd folyhat."},
+
+{name:"Zeneterápia", key:"Paul Nordoff", category:"Pszichológia", level:"Viselkedés", format:"Csoportos", duration:"Középtávú", evidence:"outcomes",
+desc:"Aktív (zenélés) vagy receptív (befogadás) formában a non-verbális kapcsolatot és a test-ritmus szinkronizálást fejleszti. Erős kutatási bázis pszichiátriai rehabilitációban."},
+
+{name:"Lovasterápia", key:"Fred Kressman", category:"Pszichológia", level:"Viselkedés", format:"Egyéni", duration:"Középtávú", evidence:"outcomes",
+desc:"A ló prédaállat: valós időben tükrözi a közelítő személy szorongási szintjét, határait – szavak nélkül. Ez megkerüli az intellektuális védekezést. Traumák, ADHD esetén hasznos."},
+
+{name:"Sorspszichológia (Szondi-teszt)", key:"Szondi Lipót", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"A 'családi tudattalan' elmélete: sorsdöntő választásainkat (pár, hivatás, betegség) az őseink rejtett, genetikailag kódolt ösztöntörekvései irányítják. A híres Szondi-teszt is erre épül."},
+
+{name:"Katathym Imaginatív Pszichoterápia (KIP)", key:"Hanscarl Leuner", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"outcomes",
+desc:"Relaxált állapotban vezetett szimbólumképek (rét, patak, hegy, erdő) segítségével dolgozik a tudattalannal. Az imagináció során a belső konfliktusok szimbolikus formában átdolgozhatók."},
+
+{name:"Pszichoszintézis", key:"Roberto Assagioli", category:"Pszichológia", level:"Spiritualitás", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"A pszichoanalízis 'felfelé' való kiterjesztése. Nem csak az alsó tudattalannal (elfojtásokkal) foglalkozik, hanem a Felsőbb Tudattalannal is. Célja a személyiség szintézise a 'Felsőbb Én' köré."},
+
+{name:"Meseterápia", key:"Boldizsár Ildikó", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"A népmesék évezredes archetipikus struktúráját használja a belső rend helyreállítására. Minden élethelyzetnek (elakadás, gyász, beavatás) megvan a maga mesebeli lenyomata és kivezető útja."},
+
+{name:"Gyászfeldolgozás Módszer (GRM)", key:"John W. James", category:"Pszichológia", level:"Hiedelmek", format:"Csoportos", duration:"Rövid", evidence:"outcomes",
+desc:"Gyakorlatias, cselekvésorientált program a veszteségek (halál, válás, költözés) feldolgozására. A befejezetlen érzelmi kapcsolatok konkrét lépéseken keresztüli azonosítására és lezárására fókuszál."},
+
+{name:"Progresszív Izomrelaxáció (PMR)", key:"Edmund Jacobson", category:"Pszichológia", level:"Viselkedés", format:"Egyéni", duration:"Rövid", evidence:"rct",
+desc:"A főbb izomcsoportok tudatos megfeszítése és elengedése. Az elme az izomkontraszton keresztül tanulja meg felismerni a rejtett feszültséget és kiváltani a relaxációs választ. Szorongáskezelés alapköve."},
+
+{name:"Transzgenerációs önismeret", key:"Böszörményi-Nagy Iván, Orvos-Tóth Noémi", category:"Pszichológia", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Az epigenetika és a családterápia találkozása. A felmenőink traumái, titkai és feldolgozatlan veszteségei generációkon átívelve hatnak a mi életünk (pl. 'örökölt sors') és választásaink formálásában."},
+
+{name:"OH-kártya (Asszociációs kártyák)", key:"Moritz Egetmeyer", category:"Pszichológia", level:"Hiedelmek", format:"Egyéni", duration:"Rövid", evidence:"clinical",
+desc:"Képek és szavak kombinációjából álló kártyacsomag, amely projektív felületként működik. A tudatos elme megkerülésével, azonnali asszociációkon keresztül segít ránézni elakadásokra."},
+
+
+// ── COACHING & FEJLESZTÉS ──────────────────────────────────────
+{name:"Coaching", key:"EMCC/ICF", category:"Coaching/Fejlesztés", level:"Képességek", format:"Egyéni", duration:"Rövid", evidence:"outcomes",
+desc:"Jelen- és jövőorientált, célalapú folyamat. Készségfejlesztéssel, célmeghatározással és a jövőkép építésével dolgozik. Erőssége: a kliens erőforrásainak aktiválása."},
+
+{name:"Compassionate Coaching", key:"Compassionate Academy", category:"Coaching/Fejlesztés", level:"Identitás", format:"Egyéni", duration:"Rövid", evidence:"outcomes",
+desc:"Haladó szinteken messze túlmutat a készségeken: az érzelmi és kapcsolati mintákkal, az identitással és a jelenlétre épülő tudatossággal dolgozik."},
+
+{name:"Ontológiai Coaching", key:"Fernando Flores", category:"Coaching/Fejlesztés", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"A 'lét' (being) szintjén dolgozik. A változás nem technika kérdése – hanem a test, az érzelmek és a nyelv (belső narratíva) újrakalibrálása, ami a létezés módját változtatja meg."},
+
+{name:"NLP (Neuro-lingvisztikus programozás)", key:"Richard Bandler", category:"Coaching/Fejlesztés", level:"Képességek", format:"Egyéni", duration:"Rövid", evidence:"outcomes",
+desc:"A szubjektív élmény struktúrájának feltérképezése és befolyásolása (horgonyzás, átkeretezés, rapport). A nyelv és a gondolkodás áthuzalozását tanítja.",
+context:"Az eszközei pragmatikusak és működnek (pl. fóbiák esetén), de a '2 nap alatt mindent megváltoztatunk' jellegű, túlárazott képzés-kultúra sokat ártott a módszer hitelességének.", contextType:"misinterpret"},
+
+{name:"The Work (A Munka – Byron Katie)", key:"Byron Katie", category:"Coaching/Fejlesztés", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"A szenvedés a gondolatokból fakad. Négy kérdéssel és a 'fordítással' a jungi projekciót és a kognitív defúziót valósítja meg zseniális egyszerűséggel. Ingyenesen hozzáférhető önsegítő eszköz."},
+
+{name:"Erőszakmentes Kommunikáció (EMK)", key:"Marshall Rosenberg", category:"Coaching/Fejlesztés", level:"Képességek", format:"Csoportos", duration:"Középtávú", evidence:"outcomes",
+desc:"Négy lépés: Megfigyelés, Érzés, Szükséglet, Kérés. Több mint kommunikációs eszköz – a szükséglet-tudatosság és az empátia radikális, szívközpontú fejlesztése."},
+
+{name:"Co-Active Coaching", key:"Kimsey-House", category:"Coaching/Fejlesztés", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"outcomes",
+desc:"Az ember teljes és kreatív. A 'szövetséges jelenlét' fogalmára épít. Beteljesítés, egyensúly, folyamat és jelenlét mentén halad, mély érzelmi munkát is végezve."},
+
+{name:"Asszertív kommunikáció", key:"Wolpe, Salter", category:"Coaching/Fejlesztés", level:"Képességek", format:"Csoportos", duration:"Rövid", evidence:"rct",
+desc:"A saját határok határozott, de nem agresszív kifejezésének gyakorlati tanítása. A passzív és agresszív viselkedés közötti egyensúlyt építi fel."},
+
+{name:"Mediáció", key:"Harvard Negotiation", category:"Coaching/Fejlesztés", level:"Környezet", format:"Páros", duration:"Néhány óra", evidence:"rct",
+desc:"Semleges harmadik fél által moderált konfliktuskezelés. Az érdek-alapú mediáció a felek pozíciói mögötti valódi szükségletek feltárására irányul (válás, munkahely)."},
+
+{name:"Council (Körbeszélgetés)", key:"Jack Zimmerman", category:"Coaching/Fejlesztés", level:"Hiedelmek", format:"Csoportos", duration:"Néhány óra", evidence:"clinical",
+desc:"Törzsi hagyományokon alapuló, rituális tér. Szívből szólni, szívvel hallgatni, spontánnak lenni. A hierarchia nélküli mély figyelem közösségépítő gyakorlata."},
+
+{name:"Gordon-módszer", key:"Thomas Gordon", category:"Coaching/Fejlesztés", level:"Képességek", format:"Csoportos", duration:"Rövid", evidence:"rct",
+desc:"Szülői, tanári és vezetői hatékonyság fejlesztése. Két alappillére: az 'Én-üzenetek' (vádaskodó Te-üzenetek helyett) és az 'értő figyelem' (aktív hallgatás). Vereségmentes konfliktusmegoldást céloz."},
+
+{name:"MBTI / DISC (Személyiségtipológiák)", key:"Jung / Marston", category:"Coaching/Fejlesztés", level:"Identitás", format:"Egyéni", duration:"Néhány óra", evidence:"outcomes",
+desc:"Üzleti és önismereti tesztek, amelyek a viselkedési és információfeldolgozási preferenciákat mérik. Csapatdinamika megértésére és a 'másság' elfogadására a legelterjedtebb corporate eszközök."},
+
+// ── SZOMATIKUS / TESTKÖZPONTÚ ──────────────────────────────────
+{name:"Somatic Experiencing (SE)", key:"Peter Levine", category:"Szomatikus/Test", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"outcomes",
+desc:"Az állatok nem kapnak PTSD-t, mert lerázzák a feszültséget. Az emberi trauma is a testben befagyott stresszenergia. Az SE ezt oldja ki apró, finom adagokban ('titration', 'pendulálás')."},
+
+{name:"TRE (Trauma/Tension Release)", key:"David Berceli", category:"Szomatikus/Test", level:"Viselkedés", format:"Egyéni", duration:"Rövid", evidence:"outcomes",
+desc:"Izomfárasztó gyakorlatokkal (csípő/comb) beindítja a test természetes remegési reflexét, ami levezeti a mély szimpatikus idegrendszeri feszültséget. Otthon is gyakorolható."},
+
+{name:"Bioenergetika (Lowen)", key:"Wilhelm Reich, Alexander Lowen", category:"Szomatikus/Test", level:"Identitás", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"Az elfojtások fizikailag is rögzülnek 'karakterpáncél' (krónikus izomfeszültség) formájában. Légzéssel és stressz-pózokkal robbantja fel a páncélt, felszabadítva a tárolt érzelmeket."},
+
+{name:"Hakomi módszer", key:"Ron Kurtz", category:"Szomatikus/Test", level:"Hiedelmek", format:"Egyéni", duration:"Hosszútávú", evidence:"clinical",
+desc:"Mindfulness-alapú finom szomatikus terápia. Rövid, kísérletező mondatokkal/érintésekkel (szondákkal) tárja fel a test tudattalan hiedelem-válaszait."},
+
+{name:"Alexander-technika", key:"F.M. Alexander", category:"Szomatikus/Test", level:"Viselkedés", format:"Egyéni", duration:"Hosszútávú", evidence:"outcomes",
+desc:"Az automatikus, felesleges izomhasználati szokások levezetésének pedagógiája. Tanárral végzett finom kézi útmutatással tanítja újra a test optimális egyensúlyát (fej-nyak-hát)."},
+
+{name:"Feldenkrais-módszer", key:"Moshé Feldenkrais", category:"Szomatikus/Test", level:"Képességek", format:"Csoportos", duration:"Hosszútávú", evidence:"outcomes",
+desc:"Az idegrendszer plaszticitását használja. Lassú, szokatlan mikromozgásokkal írja felül a koptató motorikus rutinokat. A tanulási folyamaton keresztül hoz tartós testi-lelki változást."},
+
+{name:"Kranioszakrális Terápia", key:"William Sutherland", category:"Szomatikus/Test", level:"Viselkedés", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Néhány grammos kézi érintéssel dolgozik a koponya és a keresztcsont mozgásritmusára hangolódva. A tapasztalt mély relaxációs és fájdalomcsökkentő hatás konzisztens."},
+
+{name:"Trauma-tudatos Jóga (TCTSY)", key:"Bessel van der Kolk", category:"Szomatikus/Test", level:"Viselkedés", format:"Csoportos", duration:"Hosszútávú", evidence:"rct",
+desc:"Fókusz az interocepción (belső testérzetek észlelése). Nincsenek fizikai igazítások; az ágencia (saját kontroll) visszaadására épít. PTSD esetén mérhetően hatékony."},
+
+{name:"Csikung (Qigong)", key:"Kínai belső alkímia", category:"Szomatikus/Test", level:"Viselkedés", format:"Csoportos", duration:"Hosszútávú", evidence:"outcomes",
+desc:"Lágy mozgássorok és légzéstechnikák az életenergia harmonizálására. A stresszhormonok, az egyensúly és a paraszimpatikus idegrendszer bizonyítottan pozitív választ ad rá."},
+
+{name:"Szabad tánc / Ecstatic Dance", key:"Közösségi tér", category:"Szomatikus/Test", level:"Viselkedés", format:"Csoportos", duration:"Néhány óra", evidence:"clinical",
+desc:"Alkohol, szavak és cipők nélküli tér. A feszültséglevezetés és az öröm archaikus, biztonságos formája. Nem terápia, de rendkívül felszabadító test-élmény."},
+
+{name:"5 Ritmus (5Rhythms)", key:"Gabrielle Roth", category:"Szomatikus/Test", level:"Hiedelmek", format:"Csoportos", duration:"Középtávú", evidence:"clinical",
+desc:"Öt hullám (Áramlás, Staccato, Káosz, Líra, Csend). A tánc mint mozgásmeditáció: a belső folyamatok, düh, elengedés és megnyugvás testi feldolgozása egy íven belül."},
+
+{name:"Integrált Kifejezés- és Táncterápia", key:"MÉB", category:"Szomatikus/Test", level:"Hiedelmek", format:"Csoportos", duration:"Középtávú", evidence:"outcomes",
+desc:"A mozgás a verbálisan nehezen hozzáférhető tudattalan tartalmak kifejeződési eszköze. Zárt, analitikus mélységű folyamat, amely testképzavar és korai sérülések esetén kiváló."},
+
+{name:"Bodyway", key:"Pohárnok Mihály", category:"Szomatikus/Test", level:"Identitás", format:"Csoportos", duration:"Hosszútávú", evidence:"clinical",
+desc:"Magyar fejlesztésű, nagyon intenzív önismereti folyamat. A testérzetek, az érintés és a csoportdinamika a kötődési minták és az elfojtott tartalmak felszínre hozásának médiuma."},
+
+{name:"Kineziológia (Touch for Health)", key:"George Goodheart", category:"Szomatikus/Test", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Manuális izomválasz-vizsgálattal (izomteszt) keresi a testi-lelki stressz okait, majd energetikai/mozgásos oldásokkal egyensúlyoz. Hatásos stresszoldó komplex rendszer."},
+
+{name:"Szomatodráma", key:"Buda László", category:"Szomatikus/Test", level:"Hiedelmek", format:"Csoportos", duration:"Rövid", evidence:"clinical",
+desc:"A testi tünetek, fájdalmak 'színpadra állítása' képviselők (csoporttagok) bevonásával. A drámajátékon keresztül érzelmi szinten lehet kapcsolódni a betegség/tünet rejtett üzenetéhez."},
+
+{name:"Rebirthing (Újjászületés légzés)", key:"Leonard Orr", category:"Szomatikus/Test", level:"Spiritualitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Folyamatos, szünet nélküli, intenzív körlégzés. Célja az oxigénszint növelésével módosult tudatállapot elérése, amelyben a születési, perinatális és korai traumák érzelmileg átdolgozhatók."},
+
+// ── SPIRITUÁLIS / BÖLCSESSÉGI ─────────────────────────────────
+{name:"Vipassana meditáció", key:"S.N. Goenka", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Csoportos", duration:"Intenzív", evidence:"rct",
+desc:"Tíz napos némaság. A test szenzációinak aprólékos megfigyelése (nem gondolati elemzés). A valóság változó (anicca) természetének zsigeri felismerése. Nagyon intenzív, letisztító folyamat."},
+
+{name:"Zen meditáció (Zazen)", key:"Bodhidharma", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Csoportos", duration:"Hosszútávú", evidence:"clinical",
+desc:"Szigorú forma, ülőmeditáció. A koan-ok (paradox kérdések) a logikus, fogalmi elme összeomlasztását és a tiszta jelenlét áttörését szolgálják. A legkevésbé piackompatibilis út."},
+
+{name:"Tibeti buddhizmus / Dzogcsen", key:"Padmaszambhava", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Csoportos", duration:"Hosszútávú", evidence:"clinical",
+desc:"A tiszta, éber tudatosság (rigpa) felismerése, ami mindig is jelen volt. A halál és átmeneti állapotok (bardo) tudatos megértése. Élő mester-tanítvány viszonyt igényel."},
+
+{name:"Tantra (Hagyományos)", key:"Kashmir Shaivizmus", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Páros", duration:"Hosszútávú", evidence:"clinical",
+desc:"A test és a szexualitás is az isteni energia megnyilvánulása, ezért felébresztendő. Meditáció, csakra-munka, légzés és rituálé finom egysége, amely túlmutat az olcsó 'tantramasszázs' kereteken."},
+
+{name:"Kundalini jóga", key:"3HO hagyomány", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Csoportos", duration:"Hosszútávú", evidence:"clinical",
+desc:"Tűzlégzés, mantrák és kriyák kombinációja a gerincalapi 'alvó' energia felébresztésére. Erős neurológiai és pszichológiai hatások, intenzív érzelmi felszabadulás kísérheti."},
+
+{name:"Sámáni utazás", key:"Michael Harner", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Csoportos", duration:"Néhány óra", evidence:"clinical",
+desc:"Monoton dobszóval elért módosult tudatállapot, melyben az 'utazó' az alsó/felső világokban szellemvezetőkkel, erőállatokkal találkozik. A jungi aktív imaginációhoz hasonlítható projektív tér."},
+
+{name:"Ayahuasca / Növényi medicinák", key:"Amazóniai tradíciók", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Csoportos", duration:"Intenzív", evidence:"outcomes",
+desc:"DMT tartalmú szertartásos főzet. Súlyos depresszió és PTSD esetén kutatják. Erőteljes, gyakran ego-halállal járó víziók. A biztonság kulcsa az előzetes egészségügyi szűrés és a gondos utólagos pszichológiai integráció."},
+
+{name:"Holotróp Légzés", key:"Stanislav Grof", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Csoportos", duration:"Intenzív", evidence:"clinical",
+desc:"Hiperventilációs légzés és hangos zene segítségével gyógyszermentes, pszichedelikus mélységű módosult tudatállapot érhető el. Transzperszonális, születési traumák élhetők újra."},
+
+{name:"Családállítás (Hellinger-féle)", key:"Bert Hellinger", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Csoportos", duration:"Intenzív", evidence:"clinical",
+desc:"Térbeli képviselőkkel feltárt generációs dinamikák (kizárások, sors-ismétlések). A 'tudó mező' fenomenológiája ma is tudományos rejtély, de terápiás/katarzis-ereje rendkívüli."},
+
+{name:"Pszichológiai asztrológia", key:"Liz Greene, Carl Jung", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"Nem jósol. A születési horoszkópot a jungi archetípusok (Anima, Árnyék) térképeként kezeli. A személyiségbe kódolt alapfeszültségek és erőforrások elemzésének eszköze."},
+
+{name:"Védikus asztrológia (Dzsjótis)", key:"Indiai hagyomány", category:"Spirituális/Bölcsességi", level:"Spiritualitás", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"A valós csillagképek (sziderikus zodiák) alapján a karma és a lélek fejlődési szakaszainak (Dasa rendszer) mély feltárása. Prediktívebb és sors-orientáltabb a nyugatinál."},
+
+{name:"Human Design", key:"Ra Uru Hu", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"Asztrológia, Kabbala és csakrák szintézise. Négy alaptípust és 'Belső Hatóságot' határoz meg. Rendkívül elterjedt modern energia-térkép a helyes életviteli stratégiák megtalálására."},
+
+{name:"Tarot (Archetípusos alkalmazás)", key:"Sallie Nichols", category:"Spirituális/Bölcsességi", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"A 78 lap projektív, asszociációs felület. A szimbolika rákényszeríti a racionális elmét, hogy utat engedjen a tudattalanból jövő, addig rejtett meglátásoknak és intuícióknak."},
+
+{name:"Reiki", key:"Mikao Usui", category:"Spirituális/Bölcsességi", level:"Viselkedés", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"'Egyetemes életenergia' közvetítése kézrátétellel. A tapasztalat egy konzisztens mély relaxáció és melegség-érzet, amelyet sok helyen klinikai, palliatív kiegészítőként is alkalmaznak."},
+
+{name:"Karmikus asztrológia", key:"Martin Schulman", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"A holdcsomópontok (Leszálló: múltbeli beragadás, Felszálló: lélekfeladat) tengelyére épít. Zseniális tükör az életünkben újra és újra ismétlődő csapdák és a belőlük vezető út azonosítására."},
+
+{name:"Számmisztika (Numerológia)", key:"Püthagoraszi hagyomány", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"A számokat minőségi archetípusoknak tekinti. Születési időből és névből von le karakter- és sorsképleteket. Olyan szimbolikus tükör, ami segíthet 'kívülről' rálátni a belső tendenciákra."},
+
+{name:"Biográfiai munka (Antropozófia)", key:"Rudolf Steiner nyomán", category:"Spirituális/Bölcsességi", level:"Identitás", format:"Egyéni", duration:"Középtávú", evidence:"clinical",
+desc:"Az emberi életutat hét éves ciklusokra bontja. Célja, hogy az egyén meglássa saját sorsának, múltbéli eseményeinek és kríziseinek rejtett fonalát, szellemi és fejlődési összefüggéseit."},
+
+// ── SPECIFIKUS RENDSZEREK ─────────────────────────────────────
+{name:"Érzelmi Felszabadítás Technika (EFT)", key:"Gary Craig", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"outcomes",
+desc:"Akupresszúrás pontok ritmikus kopogtatása szóbeli megerősítésekkel. A testérintés bizonyítottan csökkenti a szimpatikus stresszválaszt. Szorongás és fóbiák esetén hatékony 'kizökkentő'."},
+
+{name:"ThetaHealing", key:"Vianna Stibal", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Theta-agyhullámos (meditatív) állapotban intuitív 'letöltésekkel' cserélik a korlátozó hitrendszereket. Hatását a relaxáció, a szuggesztió és az átkeretezés pszichológiai elemei adják.",
+context:"A 'DNS-szintű kvantumgyógyulás' és 'azonnali fizikai gyógyulás' állításai tudományosan nem igazoltak, és a franchise rendkívül profitorientált.", contextType:"misinterpret"},
+
+{name:"Access Bars", key:"Gary Douglas", category:"Specifikus rendszer", level:"Viselkedés", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"A fejen lévő 32 pont (bar) tartós, lágy érintésével dolgozik. A nagyon kellemes, megkönnyebbült állapot a hosszú figyelemmel teli érintés autonóm idegrendszeri nyugtató hatásából fakad."},
+
+{name:"Wim Hof-módszer", key:"Wim Hof", category:"Specifikus rendszer", level:"Viselkedés", format:"Egyéni", duration:"Rövid", evidence:"outcomes",
+desc:"Specifikus hiperventilációs légzés és hideg (jeges) expozíció. Bizonyítottan aktiválja és szabályozza a gyulladáscsökkentő immunválaszt és a stresszhormon-szintet.",
+context:"A légzési fázist TILOS vízben vagy állva végezni az ájulásveszély miatt! A hidegterápia pedig csak fokozatosan építhető fel.", contextType:"clarify"},
+
+{name:"Ho'oponopono", key:"Morrnah Simeona", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"Négy rövid mondat: 'Sajnálom. Kérlek bocsáss meg. Köszönöm. Szeretlek.' Egy belső felelősségvállalási és tisztító mantra, amely az externalizált harag helyett a megbocsátás felé fordít."},
+
+{name:"Pránagyógyászat / Pránanadi", key:"Choa Kok Sui", category:"Specifikus rendszer", level:"Viselkedés", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Az aurában lévő energiablokkok 'tisztítására' épül. A mért tapasztalat a feszültségoldás és fájdalomcsillapítás, mely a figyelem és a relaxáció együttes hatásaként jön létre."},
+
+{name:"Angyalkommunikáció / Csatornázás", key:"Doreen Virtue nyomán", category:"Specifikus rendszer", level:"Spiritualitás", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Felsőbb spirituális entitások üzeneteinek fogadása. Számos embernek ad mély érzelmi megkönnyebbülést. Pszichológiai lencsén át: a terapeuta intuíciójának és a kollektív tudattalannak szimbolikus kifejeződése."},
+
+{name:"Kronobiológia", key:"Arthur Zsazskov nyomán", category:"Specifikus rendszer", level:"Identitás", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Születési dátum alapján fizikai, érzelmi és intellektuális 'bioritmus' kapacitás-tipológiát ad. A veleszületett energia és temperamentum ezoterikus modellje, sokak szerint nagyon pontos."},
+
+{name:"Zolotov-féle tudatfejlesztés", key:"Borisz Zolotov", category:"Specifikus rendszer", level:"Spiritualitás", format:"Csoportos", duration:"Intenzív", evidence:"suggestive",
+desc:"Orosz, rendkívül szokatlan bioenergetikai információs rendszer. Transzállapotok, érintés nélküli extázis és a 'frontális (racionális) tudat' kiiktatása a cél.",
+context:"Erősen manipulatív, szuggesztív környezet. A határok elmosása és a transzállapotok kritika nélküli, intenzív csoportos használata pszichésen destabilizáló lehet.", contextType:"risk"},
+
+{name:"Gyógyító Kód (The Healing Code)", key:"Alex Loyd", category:"Specifikus rendszer", level:"Viselkedés", format:"Egyéni", duration:"Rövid", evidence:"suggestive",
+desc:"Meghatározott kéztartásokkal a fej és a nyak felett a test négy 'gyógyító központjára' kell fókuszálni energia-átvitel céljából, relaxált állapotban. A stresszválaszt hivatott megszakítani."},
+
+{name:"Ultrarövid Terápia (UT)", key:"Buda László", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"Együléses, nagyon intenzív, direkt konzultáció. Gyorsan a probléma (gyakran testi tünet) feltételezett pszichológiai/családi gyökerére ugrik és egy drámai átkeretezéssel igyekszik feloldani."},
+
+{name:"Spirituális Választerápia (SVT)", key:"Robert Detzler", category:"Specifikus rendszer", level:"Spiritualitás", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Ingával és részletes táblázatokkal, a Felső Én kommunikációját kérve kutatja fel és 'tisztítja' a jelen és előző életek tudattalan blokkjait, hiedelmeit."},
+
+{name:"Silva-féle Agykontroll", key:"José Silva", category:"Specifikus rendszer", level:"Képességek", format:"Csoportos", duration:"Rövid", evidence:"outcomes",
+desc:"A relaxáció (alfa agyhullámú állapot) és az irányított vizualizáció (imagináció) rendkívül gyakorlatias oktatása célok eléréséhez, fájdalomcsillapításhoz, tanulásgyorsításhoz."},
+
+{name:"Belső Utazás (The Journey)", key:"Brandon Bays", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Néhány óra", evidence:"clinical",
+desc:"Mélyen relaxált állapotban vezetett imagináció, amelynek célja a sejtmemóriában tárolt fizikai/érzelmi elakadások megtalálása, és a kapcsolódó elfojtott érzelmek katartikus átélése, megbocsátása."},
+
+{name:"Logoszintézis", key:"Willem Lammers", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Rövid", evidence:"clinical",
+desc:"Az energia-pszichológia és az NLP kombinációja. A szavak teremtő erejét használja: meghatározott, specifikus mondatok ('visszaveszem az energiámat ebből a képből...') kimondásával oldja a traumákat."},
+
+{name:"Germán Gyógytudomány (Új Medicina)", key:"Ryke Geerd Hamer", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Középtávú", evidence:"suggestive",
+desc:"Alaptézise, hogy minden betegség (beleértve a rákot is) egy hirtelen elszenvedett, váratlan érzelmi konfliktus biológiai válasza. A konfliktus megoldásával a betegség is visszafordul.",
+context:"A módszer radikálisan elutasítja a hagyományos orvoslást (műtét, kemoterápia). Emiatt a rendszer követése hivatalos orvosi diagnózis esetén életveszélyes és tragikus kimenetelű lehet. Csak lelki kiegészítésként lenne szabad kezelni.", contextType:"risk"},
+
+{name:"Dianetika / Auditálás (Szcientológia)", key:"L. Ron Hubbard", category:"Specifikus rendszer", level:"Hiedelmek", format:"Egyéni", duration:"Hosszútávú", evidence:"suggestive",
+desc:"A 'reaktív elme' (amely a fájdalmas emlékeket, az engramokat tárolja) tudatosítása és törlése az E-méter (bőrellenállás mérő) és ismételt, strukturált kérdezés (auditálás) segítségével a 'Clear' állapot eléréséért.",
+context:"A Szcientológia Egyházhoz kötött, rendkívül hierarchikus, költséges és manipulatív rendszer, amelyet számos országban és volt tagok által kártékonynak és pszichésen kizsákmányolónak tartanak.", contextType:"risk"},
+
+{name:"Kvantumgyógyászat / Matrix Energetics", key:"Richard Bartlett", category:"Specifikus rendszer", level:"Spiritualitás", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Érintés nélküli, vagy könnyű 'kétpontos' érintéssel történő energetikai módszer. A kvantumfizika szókészletét (hullámfüggvény összeomlása, párhuzamos valóságok) posztulálja az azonnali fizikai/lelki változásra."},
+
+{name:"Integrált Energia Terápia (IET)", key:"Stevan J. Thayer", category:"Specifikus rendszer", level:"Spiritualitás", format:"Egyéni", duration:"Néhány óra", evidence:"suggestive",
+desc:"Speciális angyali energiákkal való munkát ígér a szervezet 9 sejtszintű memóriaterületén. A feszültségek 'kifésülésével' a fizikai, érzelmi és karmikus blokkokat hivatott oldani."}
+]; // methodsData vége (114 elem)
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+function getBadgeClass(cat){
+    if(cat==="Pszichológia") return "badge-pszicho";
+    if(cat==="Coaching/Fejlesztés") return "badge-coaching";
+    if(cat==="Szomatikus/Test") return "badge-test";
+    if(cat==="Spirituális/Bölcsességi") return "badge-spirit";
+    if(cat==="Specifikus rendszer") return "badge-brand";
+    return "";
+}
+const catIconsMap = {"Pszichológia":"🧠","Coaching/Fejlesztés":"🎯","Szomatikus/Test":"🌿","Spirituális/Bölcsességi":"✨","Specifikus rendszer":"🏷️"};
+
+function getFormatClass(f){
+    if(f==="Egyéni") return "fmt-egyeni";
+    if(f==="Páros") return "fmt-paros";
+    if(f==="Csoportos") return "fmt-csoport";
+    return "fmt-mix";
+}
+
+function getEvidenceClass(e){
+    if(e==="rct") return "ev-rct";
+    if(e==="outcomes") return "ev-outcomes";
+    if(e==="clinical") return "ev-clinical";
+    return "ev-suggestive";
+}
+
+function getDurationClass(d){
+    if(d==="Néhány óra") return "dur-hours";
+    if(d==="Rövid") return "dur-short";
+    if(d==="Középtávú") return "dur-mid";
+    if(d==="Hosszútávú") return "dur-long";
+    if(d==="Intenzív") return "dur-intensive";
+    return "";
+}
+
+// ═══════════════════════════════════════════════
+// RENDER METHODS
+// ═══════════════════════════════════════════════
+function renderMethods(data){
+    const container = document.getElementById('methodsGrid');
+    document.getElementById('countDisplay').textContent = `${data.length} módszer látható`;
+    if(!data.length){
+        container.innerHTML = '<p class="text-gray-400 col-span-full py-12 text-center">Nincs találat a megadott feltételekkel.</p>';
+        return;
+    }
+    container.innerHTML = data.map(m => {
+        const primaryLevel = m.level.split('/')[0];
+        const depth = levelDepth[primaryLevel] || 1;
+        const evLabel = evidenceLabels[m.evidence] || m.evidence;
+        const durLabel = durationLabels[m.duration] || m.duration;
+        const fmtLabel = (formatIcon[m.format]||'') + ' ' + m.format;
+
+        let contextBox = '';
+        if(m.context){
+            const isRisk = m.contextType === 'risk';
+            const isMisu = m.contextType === 'misinterpret';
+            const isClarify = m.contextType === 'clarify';
+            let cls = 'note-misu'; let icon = 'ℹ️ Érdemes tudni';
+            if (isRisk) { cls = 'note-risk'; icon = '⚠️ Kockázati figyelmeztetés'; }
+            if (isMisu) { cls = 'note-misu'; icon = '💡 Elterjedt félreértés'; }
+            if (isClarify) { cls = 'note-misu'; icon = 'ℹ️ Érdemes tudni'; }
+            
+            contextBox = `<div class="note-box ${cls} mt-3"><strong class="block mb-1 text-xs uppercase tracking-wide">${icon}</strong>${m.context}</div>`;
+        }
+
+        const descFormatted = m.desc.replace(/\n\n/g, '</p><p class="text-sm text-gray-500 leading-relaxed mt-2">');
+
+        return `
+        <article class="method-card rounded-2xl p-5 flex flex-col h-full">
+            <div class="flex items-start justify-between gap-2 mb-3">
+                <span class="badge ${getBadgeClass(m.category)}">${catIconsMap[m.category]||''} ${m.category}</span>
+                <span class="badge ${getEvidenceClass(m.evidence)} shrink-0">${evLabel}</span>
+            </div>
+            <h3 class="font-display text-lg text-ink leading-snug mb-1">${m.name}</h3>
+            ${m.key ? `<p class="text-xs text-gray-400 mb-3 italic">${m.key}</p>` : ''}
+            <div class="text-sm text-gray-500 flex-grow leading-relaxed mb-3"><p class="text-sm text-gray-500 leading-relaxed">${descFormatted}</p>${contextBox}</div>
+            <div class="border-t border-gray-100 pt-3 space-y-2">
+                <div class="flex flex-wrap gap-1.5">
+                    <span class="badge ${getFormatClass(m.format)}">${fmtLabel}</span>
+                    <span class="badge ${getDurationClass(m.duration)}">${durLabel}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-400 shrink-0">Dilts:</span>
+                    <div class="flex-grow bg-gray-100 rounded-full h-1.5" title="${m.level}">
+                        <div class="h-1.5 rounded-full bg-pine-safe" style="width:${(depth/6)*100}%;opacity:${0.4+depth*0.1}; border:none;"></div>
+                    </div>
+                    <span class="text-xs text-gray-400 shrink-0">${m.level}</span>
+                </div>
+            </div>
+        </article>`;
+    }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// FILTERING
+// ═══════════════════════════════════════════════
+const activeFilters = { cat:'all', format:'', duration:'' };
+let searchQuery = '';
+
+function applyFilters(){
+    let data = methodsData;
+    if(activeFilters.cat !== 'all') data = data.filter(m => m.category === activeFilters.cat);
+    if(activeFilters.format) data = data.filter(m => m.format.includes(activeFilters.format));
+    if(activeFilters.duration) data = data.filter(m => m.duration === activeFilters.duration);
+    if(searchQuery){
+        const q = searchQuery.toLowerCase();
+        data = data.filter(m => m.name.toLowerCase().includes(q) || (m.desc||'').toLowerCase().includes(q) || (m.key||'').toLowerCase().includes(q));
+    }
+    renderMethods(data);
+}
+
+document.getElementById('searchInput').addEventListener('input', e => { searchQuery = e.target.value; applyFilters(); });
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const group = btn.dataset.group;
+        const filter = btn.dataset.filter;
+        if(group === 'cat'){
+            activeFilters.cat = filter;
+            document.querySelectorAll('.filter-btn[data-group="cat"]').forEach(b => {
+                b.classList.remove('active');
+                b.style.background = '';
+                b.style.color = '';
+            });
+            btn.classList.add('active');
+        } else {
+            const current = activeFilters[group];
+            if(current === filter){
+                activeFilters[group] = '';
+                btn.classList.remove('active');
+            } else {
+                document.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+                activeFilters[group] = filter;
+                btn.classList.add('active');
+            }
+        }
+        applyFilters();
+    });
+});
+
+// ═══════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════
+function switchTab(id){
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-pill').forEach(el => {
+        el.classList.remove('active');
+        el.style.backgroundColor = '';
+        el.style.color = '';
+        if(el.id === 'nav-compass'){
+            el.style.backgroundColor = '#b84c1e';
+            el.style.color = '#ffffff';
+        } else {
+            el.style.color = '#ffffff';
+            el.style.opacity = '0.9';
+        }
+    });
+    
+    document.getElementById(id).classList.add('active');
+    const navBtn = document.getElementById('nav-'+id);
+    navBtn.classList.add('active');
+    
+    if(id === 'compass') {
+        navBtn.style.backgroundColor = '#b84c1e';
+        navBtn.style.color = '#ffffff';
+    } else {
+        navBtn.style.backgroundColor = '#ffffff';
+        navBtn.style.color = '#0e4d4a';
+        navBtn.style.opacity = '1';
+    }
+}
+
+// ═══════════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════════
+function renderCharts(){
+    const levels = {"Környezet":0,"Viselkedés":0,"Képességek":0,"Hiedelmek":0,"Identitás":0,"Spiritualitás":0};
+    const cats = {"Pszichológia":0,"Coaching/Fejlesztés":0,"Szomatikus/Test":0,"Spirituális/Bölcsességi":0,"Specifikus rendszer":0};
+    const formats = {"Egyéni":0,"Páros":0,"Csoportos":0};
+    const durations = {"Néhány óra":0,"Rövid":0,"Középtávú":0,"Hosszútávú":0,"Intenzív":0};
+    const evidences = {"rct":0,"outcomes":0,"clinical":0,"suggestive":0};
+
+    methodsData.forEach(m => {
+        if(cats[m.category] !== undefined) cats[m.category]++;
+        formats[m.format] = (formats[m.format]||0) + 1;
+        if(durations[m.duration] !== undefined) durations[m.duration]++;
+        if(evidences[m.evidence] !== undefined) evidences[m.evidence]++;
+        m.level.split('/').forEach(l => { if(levels[l]!==undefined) levels[l]++; });
+    });
+
+    document.getElementById('countTotal').textContent = methodsData.length;
+    document.getElementById('totalCountHeader').textContent = `(${methodsData.length})`;
+
+    const sharedOpts = { responsive:true, maintainAspectRatio:false };
+
+    new Chart(document.getElementById('levelChart'),{
+        type:'bar',
+        data:{ labels:Object.keys(levels), datasets:[{ data:Object.values(levels), backgroundColor:['#6b8f71','#4a7c59','#3d6b52','#186660','#0e4d4a','#1a3f5c'], borderRadius:6, borderSkipped:false }] },
+        options:{ ...sharedOpts, scales:{ y:{ beginAtZero:true, grid:{ color:'#f0ede8' } }, x:{ grid:{ display:false } } }, plugins:{ legend:{ display:false } } }
+    });
+
+    new Chart(document.getElementById('typeChart'),{
+        type:'doughnut',
+        data:{ labels:Object.keys(cats), datasets:[{ data:Object.values(cats), backgroundColor:['#bfdbfe','#fef3c7','#d1fae5','#ede9fe','#fee2e2'], borderColor:['#1e40af','#92400e','#065f46','#5b21b6','#991b1b'], borderWidth:1.5 }] },
+        options:{ ...sharedOpts, plugins:{ legend:{ position:'right', labels:{ boxWidth:12, font:{ size:11 } } } }, cutout:'60%' }
+    });
+
+    new Chart(document.getElementById('formatChart'),{
+        type:'doughnut',
+        data:{ labels:['Egyéni 👤','Páros 👥','Csoportos 🧑‍🤝‍🧑'], datasets:[{ data:Object.values(formats), backgroundColor:['#d1fae5','#fed7aa','#bfdbfe'], borderColor:['#065f46','#c2410c','#1d4ed8'], borderWidth:1.5 }] },
+        options:{ ...sharedOpts, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{ size:11 } } } }, cutout:'55%' }
+    });
+
+    new Chart(document.getElementById('durationChart'),{
+        type:'doughnut',
+        data:{ labels:['✨ Néhány óra','⚡ Rövid','📅 Középtávú','🌱 Hosszútávú','🔥 Intenzív'], datasets:[{ data:Object.values(durations), backgroundColor:['#fdf4ff','#f0f9ff','#fefce8','#fff1f2','#fff7ed'], borderColor:['#7e22ce','#0ea5e9','#ca8a04','#be123c','#c2410c'], borderWidth:1.5 }] },
+        options:{ ...sharedOpts, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{ size:10 } } } }, cutout:'55%' }
+    });
+
+    new Chart(document.getElementById('evidenceChart'),{
+        type:'doughnut',
+        data:{ labels:['✅ RCT','📊 Eredménykutatás','🏛 Klinikai tradíció','💫 Szuggesztív'], datasets:[{ data:Object.values(evidences), backgroundColor:['#dcfce7','#ecfdf5','#e0f2fe','#f3f4f6'], borderColor:['#14532d','#065f46','#075985','#374151'], borderWidth:1.5 }] },
+        options:{ ...sharedOpts, plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{ size:10 } } } }, cutout:'55%' }
+    });
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════════
+function nextStep(step){
+    document.querySelectorAll('.quiz-step').forEach(el => el.classList.add('hidden'));
+    document.getElementById('step'+step).classList.remove('hidden');
+    ['prog1','prog2','prog3'].forEach((id,i) => {
+        document.getElementById(id).classList.toggle('bg-rust', i < step);
+        document.getElementById(id).classList.toggle('bg-gray-200', i >= step);
+    });
+}
+
+function calculateResult(){
+    const focus = document.querySelector('input[name="focus"]:checked')?.value;
+    const worldview = document.querySelector('input[name="worldview"]:checked')?.value;
+    const effort = document.querySelector('input[name="effort"]:checked')?.value;
+    if(!focus||!worldview||!effort){ alert('Kérlek válaszolj minden kérdésre!'); return; }
+
+    document.getElementById('quizContainer').classList.add('hidden');
+    document.getElementById('quizResult').classList.remove('hidden');
+
+    const results = {
+        somatic: {
+            rational: {
+                text:"Mivel a fókuszod a testen és a traumán van, a 'csak gondolkodj másképp' jellegű megközelítések nem fognak elérni oda, ahol a feszültség tárolódik. Az idegrendszer-alapú, bizonyítékokon alapuló testközpontú terápiák az irányod.",
+                methods:["Somatic Experiencing (SE - Szomatikus Élményfeldolgozás)","TRE (Trauma and Tension Releasing Exercises)","EMDR","Progresszív Izomrelaxáció (PMR)","Biofeedback / HRV tréning"],
+                exp:"A testközpontú munka lassú és nem látványos. Az első eredmény nem egy áttörés – hanem az, hogy egy ülés után jobban alszol, kevésbé vagy feszült. A biztonság visszaépítése megelőzi a feldolgozást."
+            },
+            integrative: {
+                text:"A testi trauma és az idegrendszeri feszültség összetett – érdemes az idegrendszer-alapú módszereket pszichológiai kísérőmunkával ötvözni.",
+                methods:["Somatic Experiencing (SE)","Hakomi módszer","IFS (Belső Családrendszerek)","Bioenergetika (Lowen)","Bodyway"],
+                exp:"A test és az értelmezés egyszerre kell. A csoportos keretek különösen erősek a kötődési minták feltárásában."
+            },
+            spiritual: {
+                text:"A testi feszültség és a spirituális dimenzió sok tradícióban összekapcsolódik. Az integratív testmunka és a tudatállapot-munka kombinációja nyithat.",
+                methods:["Holotróp Légzés / Rebirthing","Somatic Experiencing (SE)","Kundalini jóga (óvatosan, informáltan)","Sámáni utazás","Ayahuasca / Növényi medicinák – integrációval"],
+                exp:"A spirituális élmények katartikusak lehetnek – de az integráció, vagyis a feldolgozás utána, ugyanolyan fontos, mint maga az élmény. Integráló terapeuta nélkül az intenzív élmények töredezettséget okozhatnak."
+            }
+        },
+        mental: {
+            rational: {
+                text:"Racionális beállítottságodhoz a bizonyítékokon alapuló, gondolkodási mintákkal dolgozó módszerek a legjobb illeszkedés.",
+                methods:["Kognitív Viselkedésterápia (CBT)","Elfogadás és Elköteleződésterápia (ACT)","Racionális-Emotív Viselkedésterápia (REBT)","Éber figyelemre épülő kognitív terápia (MBCT)","The Work (A Munka – Byron Katie)"],
+                exp:"Házi feladatok, naplózás, rendszeres önmegfigyelés szükséges. A gondolkodási minták lassabban változnak, mint ahogy azt szeretnénk – de tartósan."
+            },
+            integrative: {
+                text:"A gondolati hurkok kezelésére azok a módszerek a leghatékonyabbak, amelyek a gondolattól való távolságot és a testérzetet egyaránt munkába veszik.",
+                methods:["Elfogadás és Elköteleződésterápia (ACT)","Tudatos jelenlét (Mindfulness / MBSR)","IFS (Belső Családrendszerek)","KIP (Katathym Imaginatív Terápia)","Fókuszolás (Focusing)"],
+                exp:"A gondolat nem te vagy – ezt nem megérteni kell, hanem megtapasztalni. Ez gyakorlás és türelem kérdése."
+            },
+            spiritual: {
+                text:"Spirituális nyitottságod lehetővé teszi, hogy a gondolati hurkok mögött mélyebb hiedelem-struktúrákat, az ego rétegeit is megkérdőjelezd.",
+                methods:["The Work (A Munka – Byron Katie)","Vipassana meditáció","IFS (Belső Családrendszerek)","Zen meditáció (Zazen)","Pszichoszintézis"],
+                exp:"'A gondolat nem te vagy' – ez az egyik legmélyebb felszabadítás, és egyszerre a legtöbb nehézséggel is jár. A meditációs és hiedelem-munka kombinációja a legerősebb út."
+            }
+        },
+        emotional: {
+            quick: {
+                text:"Konkrét készségeket és eszközöket keresel az érzelmi és kapcsolati nehézségekhez. A viselkedés- és képességszintű megközelítések jó kiindulópontok.",
+                methods:["Erőszakmentes Kommunikáció (EMK)","Gordon-módszer","Dialektikus Viselkedésterápia (DBT)","Motivációs Interjú (MI)","Gottman-módszer (páros)"],
+                exp:"Ezek értékes technikák – ha mögöttes, mélyebb kötődési sebek is jelen vannak, az éles szituációkban a technika csődöt mondhat. Ha ez ismétlődő minta, érdemes mélyebbre menni."
+            },
+            deep: {
+                text:"Az érzelmi minták, veszteségek és kötődési sebek identitásszinten gyökereznek. Mély, feltáró és terápiás munkára van szükséged.",
+                methods:["Sématerápia","Gyászfeldolgozás Módszer (GRM)","Pszichodráma","Gestalt-terápia","Érzelemfókuszú Terápia (EFT) – párterápia"],
+                exp:"Ez folyamat, nem esemény. Eleinte néha rosszabbul érezheted magad – ez nem az, hogy nem működik, hanem hogy elért valahova. Tartós bizalmi kapcsolat szükséges a terapeutával."
+            }
+        },
+        existential: {
+            rational: {
+                text:"Az életközépi vagy egzisztenciális elakadás racionális megközelítése az értékek, az erőforrások és a mélyebb motiváció feltérképezésével indul.",
+                methods:["Logoterápia (és egzisztenciaanalízis)","Business/Executive/Life coaching mélyebb szinteken","Tranzakcióanalízis (TA)","MBTI / DISC profilozás","Pozitív Pszichológia"],
+                exp:"A 'Mi a célom?' helyett a 'Mi az, ami értelmet ad?' kérdés termékenyebb. A válasz nem gondolati – a cselekvésből és a viszonyulásból derül ki."
+            },
+            integrative: {
+                text:"Nyitottságod lehetővé teszi a rendszerszemléletű önismeret eszközeinek kombinálását.",
+                methods:["Integrál Pszichológia","Transzgenerációs (epigenetikai) önismeret","Enneagram","Meseterápia","Sorspszichológia (Szondi)"],
+                exp:"A krízis a régi én-kép átalakulásának jele – nem hiba, hanem küszöb. Az identitás-szintű munka időt, biztonságot és kísérőt igényel."
+            },
+            spiritual: {
+                text:"Spirituális nyitottságod lehetővé teszi, hogy az egzisztenciális válságot a lélek hívásának értsd – a jungi individuáció, vagy más tradíciók keretében.",
+                methods:["Biográfiai munka (Antropozófia)","Transzperszonális Pszichológia","Pszichoanalízis / Jungi Analitikus Pszichológia","Karmikus Asztrológia","Tibeti buddhizmus / Dzogcsen"],
+                exp:"A krízis a régi én (ego) lebomlása. Nem megoldani kell – átmenni rajta, támogatással. A transzperszonális keret teszi lehetővé, hogy ez ne összetörés, hanem átlépés legyen."
+            }
+        }
+    };
+
+    const result = focus === 'emotional'
+        ? results.emotional[effort]
+        : results[focus]?.[worldview];
+
+    if(!result) return;
+
+    document.getElementById('resultText').textContent = result.text;
+    document.getElementById('resultExpectations').textContent = result.exp;
+    const listEl = document.getElementById('resultMethods');
+    listEl.innerHTML = result.methods.map(m => `<li class="flex items-start gap-2"><span class="text-pine mt-0.5" style="color:#0e4d4a;">→</span> ${m}</li>`).join('');
+}
+
+function resetQuiz(){
+    document.getElementById('quizResult').classList.add('hidden');
+    document.getElementById('quizContainer').classList.remove('hidden');
+    document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+    nextStep(1);
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+    renderMethods(methodsData);
+    renderCharts();
+});
+</script>
+</body>
+</html>
